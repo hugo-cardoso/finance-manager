@@ -34,11 +34,11 @@ const pageSearchSchema = z.object({
 export const Route = createFileRoute("/_authenticated/dashboard/transactions/")({
   component: RouteComponent,
   pendingComponent: () => (
-    <AppSidebarContent title="Transactions">
+    <Layout>
       <div className="flex-1 flex items-center justify-center h-full">
         <Spinner />
       </div>
-    </AppSidebarContent>
+    </Layout>
   ),
   validateSearch: zodValidator(pageSearchSchema),
   loaderDeps: ({ search }) => ({
@@ -71,7 +71,7 @@ function RouteComponent() {
   const date = new Date(year, month - 1, 15);
 
   return (
-    <AppSidebarContent title="Transações" className="flex flex-col">
+    <Layout>
       <section className="flex flex-col gap-4 pt-5 md:gap-6">
         <div className="px-4 flex justify-center">
           <MonthCarrousel
@@ -106,7 +106,7 @@ function RouteComponent() {
           });
         }}
       />
-    </AppSidebarContent>
+    </Layout>
   );
 }
 
@@ -130,5 +130,13 @@ function CardTransaction(props: CardTransactionProps) {
         </CardAction>
       </CardHeader>
     </Card>
+  );
+}
+
+function Layout({ children }: React.PropsWithChildren) {
+  return (
+    <AppSidebarContent title="Lançamentos" className="flex flex-col">
+      {children}
+    </AppSidebarContent>
   );
 }

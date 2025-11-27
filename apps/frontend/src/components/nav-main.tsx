@@ -33,7 +33,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: IconDashboard,
   },
   {
-    title: "Transações",
+    title: "Lançamentos",
     icon: IconCalendarDollar,
     baseUrl: "/dashboard/transactions",
     items: [
