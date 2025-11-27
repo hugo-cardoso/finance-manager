@@ -2,7 +2,12 @@
   "name": "finance-manager",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check"
+  },
   "devDependencies": {
     "@biomejs/biome": "2.3.7",
     "turbo": "^2.6.1"
