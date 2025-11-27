@@ -45,7 +45,7 @@ export function TransactionList(props: TransactionListProps) {
     },
   });
 
-  const transactions = transactionsQuery.data?.transactions ?? [];
+  const transactions = transactionsQuery.data ?? [];
 
   const transactionsListTitle = useMemo(() => {
     if (transactions.length === 0) return "";

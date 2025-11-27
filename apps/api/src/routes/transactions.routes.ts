@@ -7,7 +7,7 @@ import { TransactionMapper } from "../mappers/transaction.js";
 import { getJwtPayload, validateJwt } from "../middlewares/validate-jwt.js";
 import { UserTransactionCategoryRespository } from "../repositories/UserTransactionCategoryRespository.js";
 import { UserTransactionRespository } from "../repositories/UserTransactionRespository.js";
-import type { RecurrenceType, TransactionResponse } from "../types/transaction.js";
+import type { RecurrenceType } from "../types/transaction.js";
 
 const getTransactionsQuerySchema = z.object({
   type: z.enum(["expense", "income"]).optional(),
@@ -57,7 +57,6 @@ export const createTransactionsRoutes = (appRoot: Hono) => {
         const query = c.req.valid("query");
 
         const transactionRepository = new UserTransactionRespository(jwtPayload.sub);
-        const transactionCategoryRespository = new UserTransactionCategoryRespository(jwtPayload.sub);
 
         const transactions = await transactionRepository.find({
           filters: {
@@ -66,60 +65,11 @@ export const createTransactionsRoutes = (appRoot: Hono) => {
             startDate: query.start_date,
             endDate: query.end_date,
           },
-          pagination: {
-            page: query.page,
-            limit: query.limit,
-          },
         });
 
-        const transactionsTotal = await transactionRepository.countByFilters({
-          type: query.type,
-          categoryId: query.category_id,
-          startDate: query.start_date,
-          endDate: query.end_date,
-        });
-
-        const transactionsTotalPages = Math.ceil(transactionsTotal / query.limit);
-        const hasNextPage = query.page < transactionsTotalPages;
-        const hasPreviousPage = query.page > 1;
-
-        const transactionsResponse: TransactionResponse[] = [];
-        const paginationResponse = {
-          page: query.page,
-          pages: transactionsTotalPages,
-          limit: query.limit,
-          total: transactionsTotal,
-          hasNextPage,
-          hasPreviousPage,
-        };
-
-        if (transactions.length === 0) {
-          return c.json({
-            transactions: transactionsResponse,
-            pagination: paginationResponse,
-          });
-        }
-
-        const uniqueCategoryIds = [...new Set(transactions.map((transaction) => transaction.categoryId))];
-
-        const transactionCategories = await transactionCategoryRespository.findByIds(uniqueCategoryIds);
-
-        const categoryMap = new Map(transactionCategories.map((category) => [category.id, category]));
-
-        for (const transaction of transactions) {
-          const category = categoryMap.get(transaction.categoryId);
-
-          if (!category) {
-            return c.text("Category not found!", 404);
-          }
-
-          transactionsResponse.push(TransactionMapper.repoToResponse(transaction, category));
-        }
-
-        return c.json({
-          transactions: transactionsResponse,
-          pagination: paginationResponse,
-        });
+        return c.json(
+          transactions.map((transaction) => TransactionMapper.repoToResponse(transaction, transaction.category)),
+        );
       } catch (error) {
         if (error instanceof Error) {
           return c.text(error.message, 400);
@@ -136,12 +86,10 @@ export const createTransactionsRoutes = (appRoot: Hono) => {
       const jwtPayload = getJwtPayload(c);
 
       const transactionRepository = new UserTransactionRespository(jwtPayload.sub);
-      const transactionCategoryRespository = new UserTransactionCategoryRespository(jwtPayload.sub);
 
       const transaction = await transactionRepository.findById(id);
-      const transactionCategory = await transactionCategoryRespository.findById(transaction.categoryId);
 
-      return c.json(TransactionMapper.repoToResponse(transaction, transactionCategory));
+      return c.json(TransactionMapper.repoToResponse(transaction, transaction.category));
     } catch (error) {
       if (error instanceof Error) {
         return c.text(error.message, 400);

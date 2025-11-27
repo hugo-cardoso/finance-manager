@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { add } from "date-fns";
 import { and, desc, eq, gte, lte, type SQLWrapper, sql } from "drizzle-orm";
+
 import { db } from "../db/index.js";
 import { transactionTable } from "../db/schema/index.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
@@ -25,61 +26,8 @@ export type GetTransactionsFilters = {
   endDate?: Date;
 };
 
-type PaginationOptions = {
-  page?: number;
-  limit?: number;
-};
-
 export class UserTransactionRespository {
   constructor(private readonly userId: string) {}
-
-  // async create(data: CreateTransaction) {
-  //   const groupId = randomUUID();
-
-  //   try {
-  //     const recurrence = data.recurrence ?? "none";
-
-  //     const isRecurrence = recurrence !== "none";
-
-  //     if (isRecurrence && !data.installments) {
-  //       throw new Error("Installments are required for recurrence");
-  //     }
-
-  //     const transaction = await db
-  //       .insert(transactionTable)
-  //       .values({
-  //         ...data,
-  //         date: data.date.toISOString(),
-  //         userId: this.userId,
-  //         groupId,
-  //         installment: isRecurrence ? 1 : data.installment,
-  //         installments: isRecurrence ? data.installments : undefined,
-  //       })
-  //       .returning()
-  //       .then(([transaction]) => transaction);
-
-  //     if (recurrence === "monthly") {
-  //       for (let i = 2; i <= data.installments!; i++) {
-  //         await db.insert(transactionTable).values({
-  //           ...data,
-  //           date: add(data.date, { months: i - 1 }).toISOString(),
-  //           userId: this.userId,
-  //           groupId,
-  //           installment: i,
-  //           installments: data.installments,
-  //         });
-  //       }
-  //     }
-
-  //     return transaction;
-  //   } catch (_) {
-  //     console.error(_);
-
-  //     await db.delete(transactionTable).where(eq(transactionTable.groupId, groupId));
-
-  //     throw new Error("Can't create user transaction");
-  //   }
-  // }
 
   async create(data: CreateTransaction) {
     const groupId = randomUUID();
@@ -126,17 +74,18 @@ export class UserTransactionRespository {
 
   async findById(id: string) {
     try {
-      const transaction = await db
-        .select()
-        .from(transactionTable)
-        .where(and(eq(transactionTable.userId, this.userId), eq(transactionTable.id, id)))
-        .limit(1);
+      const transaction = await db.query.transactionTable.findFirst({
+        where: and(eq(transactionTable.userId, this.userId), eq(transactionTable.id, id)),
+        with: {
+          category: true,
+        },
+      });
 
-      if (transaction.length === 0) {
+      if (!transaction) {
         throw new NotFoundError(`Transaction with id ${id} not found`);
       }
 
-      return transaction[0];
+      return transaction;
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw error;
@@ -148,7 +97,12 @@ export class UserTransactionRespository {
 
   async findAll() {
     try {
-      const transactions = await db.select().from(transactionTable).where(eq(transactionTable.userId, this.userId));
+      const transactions = await db.query.transactionTable.findMany({
+        where: eq(transactionTable.userId, this.userId),
+        with: {
+          category: true,
+        },
+      });
 
       return transactions;
     } catch (_) {
@@ -158,10 +112,12 @@ export class UserTransactionRespository {
 
   async findByCategoryId(categoryId: string) {
     try {
-      const transactions = await db
-        .select()
-        .from(transactionTable)
-        .where(and(eq(transactionTable.userId, this.userId), eq(transactionTable.categoryId, categoryId)));
+      const transactions = await db.query.transactionTable.findMany({
+        where: and(eq(transactionTable.userId, this.userId), eq(transactionTable.categoryId, categoryId)),
+        with: {
+          category: true,
+        },
+      });
 
       return transactions;
     } catch (_) {
@@ -169,10 +125,8 @@ export class UserTransactionRespository {
     }
   }
 
-  async find({ filters, pagination }: { filters: GetTransactionsFilters; pagination?: PaginationOptions }) {
+  async find({ filters }: { filters: GetTransactionsFilters }) {
     try {
-      const { page = 1, limit } = pagination ?? {};
-
       const where: SQLWrapper[] = [];
 
       if (filters.categoryId) {
@@ -191,18 +145,13 @@ export class UserTransactionRespository {
         where.push(lte(transactionTable.date, filters.endDate.toISOString().split("T")[0]));
       }
 
-      let transactionsQuery = db
-        .select()
-        .from(transactionTable)
-        .orderBy(desc(transactionTable.date))
-        .where(and(eq(transactionTable.userId, this.userId), ...where))
-        .$dynamic();
-
-      if (limit) {
-        transactionsQuery = transactionsQuery.limit(limit).offset(limit * (page - 1));
-      }
-
-      const transactions = await transactionsQuery;
+      const transactions = await db.query.transactionTable.findMany({
+        where: and(eq(transactionTable.userId, this.userId), ...where),
+        with: {
+          category: true,
+        },
+        orderBy: desc(transactionTable.date),
+      });
 
       return transactions;
     } catch (_) {

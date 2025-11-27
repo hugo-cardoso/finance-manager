@@ -1,5 +1,9 @@
 import { randomUUID } from "node:crypto";
+import { relations } from "drizzle-orm";
 import { date, integer, numeric, pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+
+import { transactionCategoryTable } from "./transaction-category.js";
+import { userTable } from "./user.js";
 
 export const transactionType = pgEnum("transaction_type", ["expense", "income"]);
 
@@ -23,3 +27,14 @@ export const transactionTable = pgTable("transactions", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+export const transactionRelations = relations(transactionTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [transactionTable.userId],
+    references: [userTable.id],
+  }),
+  category: one(transactionCategoryTable, {
+    fields: [transactionTable.categoryId],
+    references: [transactionCategoryTable.id],
+  }),
+}));

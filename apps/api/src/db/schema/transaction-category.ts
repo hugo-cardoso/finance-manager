@@ -1,5 +1,8 @@
 import { randomUUID } from "node:crypto";
+import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+
+import { transactionTable } from "./transaction.js";
 
 export const transactionCategoryTable = pgTable("transactions_categories", {
   id: uuid("id")
@@ -10,3 +13,7 @@ export const transactionCategoryTable = pgTable("transactions_categories", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+export const transactionCategoryRelations = relations(transactionCategoryTable, ({ many }) => ({
+  transactions: many(transactionTable),
+}));

@@ -23,18 +23,6 @@ type GetTransactionsOptions = {
   end_date?: Date;
 };
 
-type TransactionsResponse = {
-  transactions: Transaction[];
-  pagination: {
-    page: number;
-    pages: number;
-    total: number;
-    limit: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  };
-};
-
 type CreateTransactionRequest = {
   name: string;
   category_id: string;
@@ -47,12 +35,10 @@ type CreateTransactionRequest = {
 
 export class TransactionService {
   static async getTransactions(options?: GetTransactionsOptions, signal?: AbortSignal) {
-    const { page = 1, limit, category_id, start_date, end_date } = options ?? {};
+    const { category_id, start_date, end_date } = options ?? {};
 
-    const response = await api.get<TransactionsResponse>("transactions", {
+    const response = await api.get<Transaction[]>("transactions", {
       searchParams: {
-        page,
-        limit,
         category_id,
         start_date: format(start_date ?? new Date(), "yyyy-MM-dd"),
         end_date: format(end_date ?? new Date(), "yyyy-MM-dd"),
