@@ -3,7 +3,14 @@
   "tasks": {
     "build": {
       "dependsOn": ["type-check", "lint"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "inputs": ["apps/**/.env"]
+    },
+    "frontend#build": {
+      "env": ["VITE_API_URL"]
+    },
+    "api#build": {
+      "env": ["DATABASE_URL", "SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_KEY", "SUPABASE_JWT_SECRET"]
     },
     "lint": {},
     "type-check": {},
