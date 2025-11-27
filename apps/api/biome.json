@@ -1,0 +1,14 @@
+{
+  "root": false,
+  "extends": "//",
+  "files": {
+    "ignoreUnknown": false
+  },
+  "linter": {
+    "rules": {
+      "complexity": {
+        "noStaticOnlyClass": "off"
+      }
+    }
+  }
+}
