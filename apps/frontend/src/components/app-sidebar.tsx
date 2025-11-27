@@ -1,4 +1,4 @@
-import { IconInnerShadowTop } from "@tabler/icons-react";
+import { IconCash } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 
 import { NavMain } from "@/components/nav-main";
@@ -22,8 +22,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
               <Link to="/dashboard">
-                <IconInnerShadowTop className="size-5!" />
-                <span className="text-base font-semibold">Finance Manager</span>
+                <IconCash className="size-5!" />
+                <span className="text-base font-semibold">Gerenciador Financeiro</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
