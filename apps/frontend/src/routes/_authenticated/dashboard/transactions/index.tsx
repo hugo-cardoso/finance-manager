@@ -22,8 +22,6 @@ const createMonthReportQueryOptions = (options: { month: number; year: number })
 };
 
 const pageSearchSchema = z.object({
-  page: z.coerce.number().min(1).default(1),
-  limit: z.coerce.number().min(1).max(100).optional(),
   month: z.coerce
     .number()
     .optional()
@@ -42,8 +40,6 @@ export const Route = createFileRoute("/_authenticated/dashboard/transactions/")(
   ),
   validateSearch: zodValidator(pageSearchSchema),
   loaderDeps: ({ search }) => ({
-    page: search.page,
-    limit: search.limit,
     month: search.month,
     year: search.year,
   }),
@@ -62,7 +58,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/transactions/")(
 
 function RouteComponent() {
   const navigate = Route.useNavigate();
-  const { page, limit, month, year } = Route.useSearch();
+  const { month, year } = Route.useSearch();
 
   const monthReportQuery = useSuspenseQuery(createMonthReportQueryOptions({ month, year }));
 
@@ -97,8 +93,6 @@ function RouteComponent() {
       </section>
 
       <TransactionList
-        page={page}
-        limit={limit}
         date={date}
         onChangeCategory={(value) => {
           navigate({

@@ -11,8 +11,6 @@ import { AddTransactionDialog } from "./AddTransactionDialog";
 import { TransactionListItem } from "./TransactionListItem";
 
 type TransactionListProps = {
-  page: number;
-  limit?: number;
   category_id?: string;
   date: Date;
   onChangeCategory?: (category_id?: string) => void;
@@ -25,8 +23,6 @@ export function TransactionList(props: TransactionListProps) {
     queryKey: [
       "transactions",
       {
-        page: props.page,
-        limit: props.limit,
         category_id: props.category_id,
         date: format(props.date, "yyyy-MM"),
       },
@@ -34,8 +30,6 @@ export function TransactionList(props: TransactionListProps) {
     queryFn: ({ signal }) => {
       return TransactionService.getTransactions(
         {
-          page: props.page,
-          limit: props.limit,
           category_id: props.category_id,
           start_date: startOfMonth(props.date),
           end_date: endOfMonth(props.date),
