@@ -1,0 +1,14 @@
+{
+  "name": "finance-manager",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "devDependencies": {
+    "@biomejs/biome": "2.3.7",
+    "turbo": "^2.6.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1"
+}
