@@ -3,8 +3,8 @@
   "tasks": {
     "build": {
       "dependsOn": ["type-check", "lint"],
-      "outputs": ["dist/**"],
-      "inputs": ["apps/**/.env"]
+      "outputs": ["dist/**", ".vercel/output/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "frontend#build": {
       "env": ["VITE_API_URL"]
