@@ -1,14 +1,14 @@
-import { IconArrowDown, IconArrowUp, IconTrash } from "@tabler/icons-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { useMemo } from "react";
-import { Badge } from "@/components/ui/badge";
+
 import { Button } from "@/components/ui/button";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
+
 import { TransactionService } from "@/services/TransactionService";
 import { AddTransactionDialog } from "./AddTransactionDialog";
+import { TransactionListItem } from "./TransactionListItem";
 
 type TransactionListProps = {
   page: number;
@@ -42,18 +42,6 @@ export function TransactionList(props: TransactionListProps) {
         },
         signal,
       );
-    },
-  });
-
-  const deleteTransactionMutation = useMutation({
-    mutationKey: ["delete-transaction"],
-    mutationFn: TransactionService.deleteTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["transactions"],
-        exact: false,
-        refetchType: "active",
-      });
     },
   });
 
@@ -110,34 +98,7 @@ export function TransactionList(props: TransactionListProps) {
         <ul className="flex flex-col gap-4 px-4 pb-3">
           {transactions.map((transaction) => (
             <li key={transaction.id}>
-              <Item variant="muted" className="border-input">
-                <ItemMedia variant="icon" className="self-center! size-10">
-                  {transaction.type === "income" && <IconArrowUp className="size-4 text-green-500" />}
-                  {transaction.type === "expense" && <IconArrowDown className="size-4 text-red-500" />}
-                </ItemMedia>
-                <ItemContent>
-                  <ItemTitle className="flex items-center gap-2">
-                    {transaction.name}{" "}
-                    {transaction.recurrence === "monthly" && (
-                      <Badge variant="secondary">
-                        {transaction.installment} / {transaction.installments}
-                      </Badge>
-                    )}
-                  </ItemTitle>
-                  <ItemDescription>
-                    {transaction.amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
-                  </ItemDescription>
-                </ItemContent>
-                <ItemActions>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => deleteTransactionMutation.mutate(transaction.id)}
-                  >
-                    <IconTrash />
-                  </Button>
-                </ItemActions>
-              </Item>
+              <TransactionListItem transaction={transaction} />
             </li>
           ))}
         </ul>

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -71,6 +71,12 @@ export function AddTransactionDialog(props: AddTransactionDialogProps) {
   const yearsList = useMemo<number[]>(() => {
     return Array.from({ length: 10 }, (_, index) => 2025 + index);
   }, []);
+
+  useEffect(() => {
+    if (!open) {
+      setRecurrence("none");
+    }
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

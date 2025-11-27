@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { api } from "@/lib/api";
 
-type Transaction = {
+export type Transaction = {
   id: string;
   name: string;
   amount: number;
@@ -10,6 +10,9 @@ type Transaction = {
   recurrence: "none" | "weekly" | "monthly" | "yearly";
   installment: number;
   installments: number | null;
+  category: {
+    name: string;
+  };
 };
 
 type GetTransactionsOptions = {
