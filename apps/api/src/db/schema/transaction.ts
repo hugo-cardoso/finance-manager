@@ -11,6 +11,7 @@ export const transactionTable = pgTable("transactions", {
     .$defaultFn(() => randomUUID()),
   userId: uuid("user_id").notNull(),
   categoryId: uuid("category_id").notNull(),
+  groupId: uuid("group_id").notNull(),
   type: transactionType().notNull(),
   amount: numeric({ mode: "number" }).notNull().default(0),
   name: varchar({ length: 255 }).notNull(),

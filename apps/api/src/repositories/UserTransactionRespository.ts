@@ -1,5 +1,6 @@
+import { randomUUID } from "node:crypto";
+import { add } from "date-fns";
 import { and, desc, eq, gte, lte, type SQLWrapper, sql } from "drizzle-orm";
-
 import { db } from "../db/index.js";
 import { transactionTable } from "../db/schema/index.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
@@ -32,20 +33,93 @@ type PaginationOptions = {
 export class UserTransactionRespository {
   constructor(private readonly userId: string) {}
 
+  // async create(data: CreateTransaction) {
+  //   const groupId = randomUUID();
+
+  //   try {
+  //     const recurrence = data.recurrence ?? "none";
+
+  //     const isRecurrence = recurrence !== "none";
+
+  //     if (isRecurrence && !data.installments) {
+  //       throw new Error("Installments are required for recurrence");
+  //     }
+
+  //     const transaction = await db
+  //       .insert(transactionTable)
+  //       .values({
+  //         ...data,
+  //         date: data.date.toISOString(),
+  //         userId: this.userId,
+  //         groupId,
+  //         installment: isRecurrence ? 1 : data.installment,
+  //         installments: isRecurrence ? data.installments : undefined,
+  //       })
+  //       .returning()
+  //       .then(([transaction]) => transaction);
+
+  //     if (recurrence === "monthly") {
+  //       for (let i = 2; i <= data.installments!; i++) {
+  //         await db.insert(transactionTable).values({
+  //           ...data,
+  //           date: add(data.date, { months: i - 1 }).toISOString(),
+  //           userId: this.userId,
+  //           groupId,
+  //           installment: i,
+  //           installments: data.installments,
+  //         });
+  //       }
+  //     }
+
+  //     return transaction;
+  //   } catch (_) {
+  //     console.error(_);
+
+  //     await db.delete(transactionTable).where(eq(transactionTable.groupId, groupId));
+
+  //     throw new Error("Can't create user transaction");
+  //   }
+  // }
+
   async create(data: CreateTransaction) {
+    const groupId = randomUUID();
+
     try {
-      const transaction = await db
-        .insert(transactionTable)
-        .values({
+      const recurrenceType = data.recurrence ?? "none";
+      const isRecurrence = recurrenceType !== "none";
+
+      return await db.transaction(async (tx) => {
+        const firstTransaction: typeof transactionTable.$inferInsert = {
           ...data,
           date: data.date.toISOString(),
           userId: this.userId,
-        })
-        .returning()
-        .then(([transaction]) => transaction);
+          groupId,
+          installment: 1,
+          installments: isRecurrence ? data.installments : undefined,
+          recurrence: recurrenceType,
+        };
 
-      return transaction;
+        if (!isRecurrence || recurrenceType !== "monthly") {
+          const [transaction] = await tx.insert(transactionTable).values(firstTransaction).returning();
+
+          return transaction;
+        }
+
+        const transactionsToInsert = [
+          firstTransaction,
+          ...Array.from({ length: data.installments! - 1 }, (_, i) => ({
+            ...firstTransaction,
+            date: add(firstTransaction.date, { months: i + 1 }).toISOString(),
+            installment: i + 2,
+          })),
+        ];
+
+        const insertedTransactions = await tx.insert(transactionTable).values(transactionsToInsert).returning();
+
+        return insertedTransactions[0];
+      });
     } catch (_) {
+      await db.delete(transactionTable).where(eq(transactionTable.groupId, groupId));
       throw new Error("Can't create user transaction");
     }
   }
@@ -138,6 +212,15 @@ export class UserTransactionRespository {
 
   async delete(id: string) {
     try {
+      const transaction = await this.findById(id);
+
+      if (transaction.recurrence !== "none") {
+        await db
+          .delete(transactionTable)
+          .where(and(eq(transactionTable.userId, this.userId), eq(transactionTable.groupId, transaction.groupId)));
+        return;
+      }
+
       await db
         .delete(transactionTable)
         .where(and(eq(transactionTable.userId, this.userId), eq(transactionTable.id, id)));

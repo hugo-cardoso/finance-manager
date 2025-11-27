@@ -2,7 +2,7 @@ import { IconArrowDown, IconArrowUp, IconTrash } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { useMemo } from "react";
-
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
@@ -116,7 +116,14 @@ export function TransactionList(props: TransactionListProps) {
                   {transaction.type === "expense" && <IconArrowDown className="size-4 text-red-500" />}
                 </ItemMedia>
                 <ItemContent>
-                  <ItemTitle>{transaction.name}</ItemTitle>
+                  <ItemTitle className="flex items-center gap-2">
+                    {transaction.name}{" "}
+                    {transaction.recurrence === "monthly" && (
+                      <Badge variant="secondary">
+                        {transaction.installment} / {transaction.installments}
+                      </Badge>
+                    )}
+                  </ItemTitle>
                   <ItemDescription>
                     {transaction.amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                   </ItemDescription>

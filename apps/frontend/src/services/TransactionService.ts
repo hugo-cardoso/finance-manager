@@ -7,6 +7,9 @@ type Transaction = {
   amount: number;
   date: string;
   type: "income" | "expense";
+  recurrence: "none" | "weekly" | "monthly" | "yearly";
+  installment: number;
+  installments: number | null;
 };
 
 type GetTransactionsOptions = {
@@ -35,6 +38,8 @@ type CreateTransactionRequest = {
   type: "income" | "expense";
   amount: number;
   date: Date;
+  recurrence: "none" | "weekly" | "monthly" | "yearly";
+  installments: number | undefined;
 };
 
 export class TransactionService {
@@ -63,6 +68,8 @@ export class TransactionService {
         type: request.type,
         amount: request.amount,
         date: format(request.date, "yyyy-MM-dd"),
+        recurrence: request.recurrence,
+        installments: request.installments,
       },
     });
 

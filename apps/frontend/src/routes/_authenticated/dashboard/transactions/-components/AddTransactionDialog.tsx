@@ -23,9 +23,13 @@ type AddTransactionDialogProps = {
   onSuccess: () => void;
 };
 
+type RecurrenceType = "none" | "weekly" | "monthly" | "yearly";
+
 export function AddTransactionDialog(props: AddTransactionDialogProps) {
   const { month, year } = useSearch({ from: "/_authenticated/dashboard/transactions/" });
   const [open, setOpen] = useState(false);
+
+  const [recurrence, setRecurrence] = useState<RecurrenceType>("none");
 
   const createTransactionMutation = useMutation({
     mutationKey: ["create-transaction"],
@@ -47,6 +51,8 @@ export function AddTransactionDialog(props: AddTransactionDialogProps) {
     const amount = formData.get("amount") as string;
     const month = formData.get("month") as string;
     const year = formData.get("year") as string;
+    const recurrence = formData.get("recurrence") as RecurrenceType;
+    const installments = formData.get("installments") as string;
 
     await createTransactionMutation.mutateAsync({
       name,
@@ -54,6 +60,8 @@ export function AddTransactionDialog(props: AddTransactionDialogProps) {
       type,
       amount: Number(amount),
       date: new Date(Number(year), Number(month) - 1, 15),
+      recurrence,
+      installments: recurrence !== "none" ? Number(installments) : undefined,
     });
 
     props.onSuccess();
@@ -159,6 +167,48 @@ export function AddTransactionDialog(props: AddTransactionDialogProps) {
                 </Select>
               </div>
             </div>
+
+            <div className="grid gap-3">
+              <Label>Recorrência</Label>
+              <Select
+                name="recurrence"
+                defaultValue={recurrence}
+                onValueChange={(value) => {
+                  setRecurrence(value as RecurrenceType);
+                }}
+                required
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="none">Nenhuma</SelectItem>
+                    <SelectItem value="monthly">Mensal</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {recurrence !== "none" && (
+              <div className="grid gap-3">
+                <Label>Quantidade de parcelas</Label>
+                <Select name="installments" defaultValue="2" required>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Array.from({ length: 11 }, (_, index) => (
+                        <SelectItem key={index} value={(index + 2).toString()}>
+                          {index + 2}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
           <DialogFooter>
             <DialogClose asChild>
