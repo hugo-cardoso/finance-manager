@@ -70,4 +70,12 @@ export class AuthService {
 
     return response.json();
   }
+
+  static async updatePassword(newPassword: string) {
+    await api.put("user/password", {
+      json: {
+        newPassword,
+      },
+    });
+  }
 }
