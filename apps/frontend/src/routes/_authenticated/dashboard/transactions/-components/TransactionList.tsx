@@ -8,7 +8,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 import { TransactionService } from "@/services/TransactionService";
 import { AddTransactionDialog } from "./AddTransactionDialog";
-import { TransactionListItem } from "./TransactionListItem";
+import { TransactionsTable } from "./TransactionsTable";
 
 type TransactionListProps = {
   category_id?: string;
@@ -89,13 +89,9 @@ export function TransactionList(props: TransactionListProps) {
       )}
 
       {transactions.length > 0 && (
-        <ul className="flex flex-col gap-4 px-4 pb-3">
-          {transactions.map((transaction) => (
-            <li key={transaction.id}>
-              <TransactionListItem transaction={transaction} />
-            </li>
-          ))}
-        </ul>
+        <div className="px-4">
+          <TransactionsTable transactions={transactions} />
+        </div>
       )}
     </section>
   );
