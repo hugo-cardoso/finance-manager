@@ -1,16 +1,19 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "globalDependencies": [".env"],
   "tasks": {
     "build": {
-      "dependsOn": ["type-check", "lint"],
-      "outputs": ["dist/**", ".vercel/output/**"],
-      "inputs": ["$TURBO_DEFAULT$", ".env"]
+      "dependsOn": ["^build"]
     },
     "frontend#build": {
-      "env": ["VITE_API_URL"]
+      "dependsOn": ["type-check", "lint"],
+      "outputs": ["dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "api#build": {
-      "env": ["DATABASE_URL", "SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_KEY", "SUPABASE_JWT_SECRET"]
+      "dependsOn": ["type-check", "lint"],
+      "outputs": [".vercel/output/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "lint": {},
     "type-check": {},

@@ -12,6 +12,8 @@ export const Route = createFileRoute("/auth/sign-up/")({
 });
 
 function RouteComponent() {
+  const navigate = Route.useNavigate();
+
   const signUpMutation = useMutation({
     mutationFn: AuthService.signUp,
   });
@@ -32,6 +34,11 @@ function RouteComponent() {
     }
 
     await signUpMutation.mutateAsync({ email, password, firstName, lastName });
+
+    navigate({
+      to: "/auth/sign-up/verify",
+      search: { email },
+    });
   };
 
   return (

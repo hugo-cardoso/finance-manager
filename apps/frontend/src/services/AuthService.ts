@@ -47,10 +47,22 @@ export class AuthService {
     });
   }
 
-  static async confirmSignUp(token: string) {
-    await api.post("auth/sign-up/confirm", {
+  static async verifyEmailOtp(email: string, token: string) {
+    await api.post("auth/verify-email-otp", {
       json: {
+        email,
         token,
+      },
+      context: {
+        auth: false,
+      },
+    });
+  }
+
+  static async resendEmailOtp(email: string) {
+    await api.post("auth/resend-email-otp", {
+      json: {
+        email,
       },
       context: {
         auth: false,

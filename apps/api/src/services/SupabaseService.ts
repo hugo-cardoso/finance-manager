@@ -58,10 +58,22 @@ export class SupabaseService {
     }
   }
 
-  async signUpConfirm(token: string) {
+  async verifyEmailOtp(email: string, token: string) {
     const { error } = await supabase.auth.verifyOtp({
-      token_hash: token,
-      type: "email",
+      email,
+      token,
+      type: "signup",
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async resendEmailOtp(email: string) {
+    const { error } = await supabase.auth.resend({
+      email,
+      type: "signup",
     });
 
     if (error) {

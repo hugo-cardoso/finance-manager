@@ -16,8 +16,16 @@ const signUpBodySchema = z.object({
   last_name: z.string().min(1),
 });
 
-const signUpConfirmQuerySchema = z.object({
-  token: z.string(),
+const verifyEmailOtpSchema = z.object({
+  email: z.email(),
+  token: z
+    .string()
+    .length(6)
+    .regex(/^\d{6}$/),
+});
+
+const resendEmailOtpSchema = z.object({
+  email: z.email(),
 });
 
 export const createAuthRoutes = (appRoot: Hono) => {
@@ -86,11 +94,11 @@ export const createAuthRoutes = (appRoot: Hono) => {
   );
 
   app.post(
-    "/sign-up/confirm",
+    "/verify-email-otp",
     validator("json", (value, c) => {
-      const parsed = signUpConfirmQuerySchema.safeParse(value);
+      const parsed = verifyEmailOtpSchema.safeParse(value);
       if (!parsed.success) {
-        return c.text("Invalid!", 400);
+        return c.text("Email ou código OTP inválido", 400);
       }
       return parsed.data;
     }),
@@ -98,9 +106,35 @@ export const createAuthRoutes = (appRoot: Hono) => {
       try {
         const body = c.req.valid("json");
 
-        await supabaseService.signUpConfirm(body.token);
+        await supabaseService.verifyEmailOtp(body.email, body.token);
 
-        return c.json({ message: "Email confirmed successfully" }, 200);
+        return c.json({ message: "Email verificado com sucesso" }, 200);
+      } catch (error) {
+        if (error instanceof Error) {
+          return c.text(error.message, 400);
+        }
+
+        return c.text("Internal Server Error", 500);
+      }
+    },
+  );
+
+  app.post(
+    "/resend-email-otp",
+    validator("json", (value, c) => {
+      const parsed = resendEmailOtpSchema.safeParse(value);
+      if (!parsed.success) {
+        return c.text("Email inválido", 400);
+      }
+      return parsed.data;
+    }),
+    async (c) => {
+      try {
+        const body = c.req.valid("json");
+
+        await supabaseService.resendEmailOtp(body.email);
+
+        return c.json({ message: "Código OTP reenviado com sucesso" }, 200);
       } catch (error) {
         if (error instanceof Error) {
           return c.text(error.message, 400);

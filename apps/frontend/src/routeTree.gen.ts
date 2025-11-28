@@ -17,7 +17,7 @@ import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index
 import { Route as AuthSignOutIndexRouteImport } from './routes/auth/sign-out/index'
 import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
-import { Route as AuthSignUpConfirmIndexRouteImport } from './routes/auth/sign-up/confirm/index'
+import { Route as AuthSignUpVerifyIndexRouteImport } from './routes/auth/sign-up/verify/index'
 import { Route as AuthenticatedDashboardUserIndexRouteImport } from './routes/_authenticated/dashboard/user/index'
 import { Route as AuthenticatedDashboardTransactionsIndexRouteImport } from './routes/_authenticated/dashboard/transactions/index'
 
@@ -61,9 +61,9 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthSignUpConfirmIndexRoute = AuthSignUpConfirmIndexRouteImport.update({
-  id: '/confirm/',
-  path: '/confirm/',
+const AuthSignUpVerifyIndexRoute = AuthSignUpVerifyIndexRouteImport.update({
+  id: '/verify/',
+  path: '/verify/',
   getParentRoute: () => AuthSignUpRouteRoute,
 } as any)
 const AuthenticatedDashboardUserIndexRoute =
@@ -89,7 +89,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsIndexRoute
   '/dashboard/user': typeof AuthenticatedDashboardUserIndexRoute
-  '/auth/sign-up/confirm': typeof AuthSignUpConfirmIndexRoute
+  '/auth/sign-up/verify': typeof AuthSignUpVerifyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -99,7 +99,7 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpIndexRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsIndexRoute
   '/dashboard/user': typeof AuthenticatedDashboardUserIndexRoute
-  '/auth/sign-up/confirm': typeof AuthSignUpConfirmIndexRoute
+  '/auth/sign-up/verify': typeof AuthSignUpVerifyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -113,7 +113,7 @@ export interface FileRoutesById {
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/_authenticated/dashboard/transactions/': typeof AuthenticatedDashboardTransactionsIndexRoute
   '/_authenticated/dashboard/user/': typeof AuthenticatedDashboardUserIndexRoute
-  '/auth/sign-up/confirm/': typeof AuthSignUpConfirmIndexRoute
+  '/auth/sign-up/verify/': typeof AuthSignUpVerifyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -127,7 +127,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up/'
     | '/dashboard/transactions'
     | '/dashboard/user'
-    | '/auth/sign-up/confirm'
+    | '/auth/sign-up/verify'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -137,7 +137,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/dashboard/transactions'
     | '/dashboard/user'
-    | '/auth/sign-up/confirm'
+    | '/auth/sign-up/verify'
   id:
     | '__root__'
     | '/'
@@ -150,7 +150,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up/'
     | '/_authenticated/dashboard/transactions/'
     | '/_authenticated/dashboard/user/'
-    | '/auth/sign-up/confirm/'
+    | '/auth/sign-up/verify/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -219,11 +219,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/auth/sign-up/confirm/': {
-      id: '/auth/sign-up/confirm/'
-      path: '/confirm'
-      fullPath: '/auth/sign-up/confirm'
-      preLoaderRoute: typeof AuthSignUpConfirmIndexRouteImport
+    '/auth/sign-up/verify/': {
+      id: '/auth/sign-up/verify/'
+      path: '/verify'
+      fullPath: '/auth/sign-up/verify'
+      preLoaderRoute: typeof AuthSignUpVerifyIndexRouteImport
       parentRoute: typeof AuthSignUpRouteRoute
     }
     '/_authenticated/dashboard/user/': {
@@ -273,12 +273,12 @@ const AuthSignInRouteRouteWithChildren = AuthSignInRouteRoute._addFileChildren(
 
 interface AuthSignUpRouteRouteChildren {
   AuthSignUpIndexRoute: typeof AuthSignUpIndexRoute
-  AuthSignUpConfirmIndexRoute: typeof AuthSignUpConfirmIndexRoute
+  AuthSignUpVerifyIndexRoute: typeof AuthSignUpVerifyIndexRoute
 }
 
 const AuthSignUpRouteRouteChildren: AuthSignUpRouteRouteChildren = {
   AuthSignUpIndexRoute: AuthSignUpIndexRoute,
-  AuthSignUpConfirmIndexRoute: AuthSignUpConfirmIndexRoute,
+  AuthSignUpVerifyIndexRoute: AuthSignUpVerifyIndexRoute,
 }
 
 const AuthSignUpRouteRouteWithChildren = AuthSignUpRouteRoute._addFileChildren(
