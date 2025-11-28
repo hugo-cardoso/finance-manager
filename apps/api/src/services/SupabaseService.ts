@@ -91,4 +91,14 @@ export class SupabaseService {
       throw new Error("Internal Server Error");
     }
   }
+
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
+    const { error } = await supabase.auth.admin.updateUserById(userId, {
+      password: newPassword,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
 }
