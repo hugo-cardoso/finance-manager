@@ -17,10 +17,11 @@ type SignInResponse = {
 
 export class SupabaseService {
   private readonly authApi = ky.create({
-    prefixUrl: new URL("/auth/v1", process.env.SUPABASE_URL as string).toString(),
+    prefixUrl: process.env.SUPABASE_URL,
     headers: {
       "Content-Type": "application/json",
       apikey: process.env.SUPABASE_ANON_KEY as string,
+      // Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY as string}`,
     },
   });
 
@@ -72,7 +73,7 @@ export class SupabaseService {
   async refreshToken(refreshToken: string): Promise<SignInResponse> {
     try {
       const response = await this.authApi
-        .post<SignInResponse>("token", {
+        .post<SignInResponse>("auth/v1/token", {
           searchParams: {
             grant_type: "refresh_token",
           },
@@ -81,6 +82,22 @@ export class SupabaseService {
           },
         })
         .json();
+
+      return response;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+
+      throw new Error("Internal Server Error");
+    }
+  }
+
+  async changePassword(userId: string, newPassword: string) {
+    try {
+      const response = await supabase.auth.admin.updateUserById(userId, {
+        password: newPassword,
+      });
 
       return response;
     } catch (error) {
