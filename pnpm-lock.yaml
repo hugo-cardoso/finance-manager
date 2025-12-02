@@ -20,6 +20,9 @@ importers:
       '@hono/node-server':
         specifier: ^1.19.6
         version: 1.19.6(hono@4.10.7)
+      '@hono/zod-validator':
+        specifier: ^0.7.5
+        version: 0.7.5(hono@4.10.7)(zod@4.1.13)
       '@supabase/supabase-js':
         specifier: ^2.84.0
         version: 2.86.0
@@ -35,6 +38,9 @@ importers:
       hono:
         specifier: ^4.10.6
         version: 4.10.7
+      hono-simple-di:
+        specifier: ^0.2.1
+        version: 0.2.1(hono@4.10.7)(typescript@5.9.3)
       ky:
         specifier: ^1.14.0
         version: 1.14.0
@@ -687,6 +693,12 @@ packages:
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: ^4
+
+  '@hono/zod-validator@0.7.5':
+    resolution: {integrity: sha512-n4l4hutkfYU07PzRUHBOVzUEn38VSfrh+UVE5d0w4lyfWDOEhzxIupqo5iakRiJL44c3vTuFJBvcmUl8b9agIA==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.25.0 || ^4.0.0
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -2170,6 +2182,12 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
+  hono-simple-di@0.2.1:
+    resolution: {integrity: sha512-QxfitwAre3Jb6Y5bLXclobz3CLZ0RvO4SWmPe9gQ+rZvD9z2piVnEeHY3mdyVW8tVp/1ZVRtxMb3ukMwbf/t/w==}
+    peerDependencies:
+      hono: '>=4.0.0'
+      typescript: '>=5.0.0'
+
   hono@4.10.7:
     resolution: {integrity: sha512-icXIITfw/07Q88nLSkB9aiUrd8rYzSweK681Kjo/TSggaGbOX4RRyxxm71v+3PC8C/j+4rlxGeoTRxQDkaJkUw==}
     engines: {node: '>=16.9.0'}
@@ -3299,6 +3317,11 @@ snapshots:
   '@hono/node-server@1.19.6(hono@4.10.7)':
     dependencies:
       hono: 4.10.7
+
+  '@hono/zod-validator@0.7.5(hono@4.10.7)(zod@4.1.13)':
+    dependencies:
+      hono: 4.10.7
+      zod: 4.1.13
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -4719,6 +4742,11 @@ snapshots:
       csstype: 3.2.3
 
   graceful-fs@4.2.11: {}
+
+  hono-simple-di@0.2.1(hono@4.10.7)(typescript@5.9.3):
+    dependencies:
+      hono: 4.10.7
+      typescript: 5.9.3
 
   hono@4.10.7: {}
 
