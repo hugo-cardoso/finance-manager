@@ -3,8 +3,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.dev.ts",
+    "dev:debug": "tsx watch src/server.dev.ts --inspect",
     "lint": "biome check ./src",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:studio": "tsx node_modules/drizzle-kit/bin.cjs studio --verbose"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "drizzle-kit": "^0.31.8",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }

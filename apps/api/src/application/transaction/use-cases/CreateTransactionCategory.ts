@@ -10,6 +10,9 @@ export class CreateTransactionCategory {
     const category = TransactionCategory.create({
       id: Uuid.generate(),
       name: data.name,
+      icon: data.icon,
+      color: data.color,
+      type: data.type,
     });
 
     return this.transactionCategoryRepository.create(category);

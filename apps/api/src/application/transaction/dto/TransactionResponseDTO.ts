@@ -3,9 +3,13 @@ import type { TransactionCategoryResponseDTO } from "./TransactionCategoryRespon
 export type TransactionResponseDTO = {
   id: string;
   name: string;
+  description?: string;
   category: TransactionCategoryResponseDTO;
-  type: string;
   amount: number;
-  recurrence: string;
   date: string;
+  recurrence: string;
+  installment?: {
+    number: number;
+    total: number;
+  };
 };

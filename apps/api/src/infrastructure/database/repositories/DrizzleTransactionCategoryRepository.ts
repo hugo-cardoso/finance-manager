@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 
 import type { TransactionCategory } from "../../../domain/transaction/entities/TransactionCategory.js";
 import type { ITransactionCategoryRepository } from "../../../domain/transaction/repositories/ITransactionCategoryRepository.js";
@@ -7,14 +7,11 @@ import { transactionCategoryTable } from "../drizzle/schema/transaction-category
 import { TransactionCategoryMapper } from "../mappers/TransactionCategory.js";
 
 export class DrizzleTransactionCategoryRepository implements ITransactionCategoryRepository {
-  constructor(
-    private readonly db: DrizzleDB,
-    private readonly userId: string,
-  ) {}
+  constructor(private readonly db: DrizzleDB) {}
 
   async findById(id: string): Promise<TransactionCategory | null> {
     const category = await this.db.query.transactionCategoryTable.findFirst({
-      where: and(eq(transactionCategoryTable.id, id), eq(transactionCategoryTable.userId, this.userId)),
+      where: eq(transactionCategoryTable.id, id),
     });
 
     if (!category) return null;
@@ -22,10 +19,16 @@ export class DrizzleTransactionCategoryRepository implements ITransactionCategor
     return TransactionCategoryMapper.toEntity(category);
   }
 
-  async findAll(): Promise<TransactionCategory[]> {
+  async findByIds(ids: string[]): Promise<TransactionCategory[]> {
     const categories = await this.db.query.transactionCategoryTable.findMany({
-      where: and(eq(transactionCategoryTable.userId, this.userId)),
+      where: inArray(transactionCategoryTable.id, ids),
     });
+
+    return categories.map(TransactionCategoryMapper.toEntity);
+  }
+
+  async findAll(): Promise<TransactionCategory[]> {
+    const categories = await this.db.query.transactionCategoryTable.findMany();
 
     return categories.map(TransactionCategoryMapper.toEntity);
   }
@@ -33,8 +36,10 @@ export class DrizzleTransactionCategoryRepository implements ITransactionCategor
   async create(category: TransactionCategory): Promise<TransactionCategory> {
     await this.db.insert(transactionCategoryTable).values({
       id: category.id.value,
-      userId: this.userId,
       name: category.name,
+      color: category.color,
+      icon: category.icon,
+      type: category.type,
     });
 
     return category;
@@ -55,9 +60,8 @@ export class DrizzleTransactionCategoryRepository implements ITransactionCategor
       .update(transactionCategoryTable)
       .set({
         name: category.name,
-        updatedAt: sql`now()`,
       })
-      .where(and(eq(transactionCategoryTable.id, category.id.value), eq(transactionCategoryTable.userId, this.userId)))
+      .where(eq(transactionCategoryTable.id, category.id.value))
       .returning()
       .then(([category]) => category);
 

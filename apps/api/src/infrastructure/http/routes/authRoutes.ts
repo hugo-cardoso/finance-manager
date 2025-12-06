@@ -47,8 +47,8 @@ export const authRoutes = (_app: Hono) => {
       await supabaseAuthService.signUp({
         email: body.email,
         password: body.password,
-        first_name: body.first_name,
-        last_name: body.last_name,
+        firstName: body.first_name,
+        lastName: body.last_name,
       });
 
       return c.json({ message: "User created successfully" }, 201);

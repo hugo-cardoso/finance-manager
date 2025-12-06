@@ -1,7 +1,8 @@
 import type { InferSelectModel } from "drizzle-orm";
 
-import type { TransactionCategoryResponseDTO } from "../../../application/transactions/dto/TransactionCategoryResponseDTO.js";
+import type { TransactionCategoryResponseDTO } from "../../../application/transaction/dto/TransactionCategoryResponseDTO.js";
 import { TransactionCategory } from "../../../domain/transaction/entities/TransactionCategory.js";
+import type { TransactionType } from "../../../domain/transaction/enums/TransactionType.js";
 import { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
 import type { transactionCategoryTable } from "../drizzle/schema/transaction-category.js";
 
@@ -12,6 +13,9 @@ export class TransactionCategoryMapper {
     return TransactionCategory.create({
       id: Uuid.create(dbModel.id),
       name: dbModel.name,
+      icon: dbModel.icon,
+      color: dbModel.color,
+      type: dbModel.type as TransactionType,
     });
   }
 
@@ -19,6 +23,9 @@ export class TransactionCategoryMapper {
     return {
       id: category.id.value,
       name: category.name,
+      icon: category.icon,
+      color: category.color,
+      type: category.type,
     };
   }
 }

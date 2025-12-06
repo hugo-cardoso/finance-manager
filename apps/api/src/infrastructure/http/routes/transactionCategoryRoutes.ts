@@ -3,49 +3,62 @@ import { Hono } from "hono";
 import { Dependency } from "hono-simple-di";
 import z from "zod";
 
-import { CreateTransactionCategory } from "../../../application/transactions/use-cases/CreateTransactionCategory.js";
-import { DeleteTransactionCategory } from "../../../application/transactions/use-cases/DeleteTransactionCategory.js";
-import { GetAllTransactionsCategory } from "../../../application/transactions/use-cases/GetAllTransactionsCategory.js";
-import { GetTransactionCategoryById } from "../../../application/transactions/use-cases/GetTransactionCategoryById.js";
-import { UpdateTransactionCategory } from "../../../application/transactions/use-cases/UpdateTransactionCategory.js";
+import { CreateTransactionCategory } from "../../../application/transaction/use-cases/CreateTransactionCategory.js";
+import { DeleteTransactionCategory } from "../../../application/transaction/use-cases/DeleteTransactionCategory.js";
+import { GetAllTransactionsCategory } from "../../../application/transaction/use-cases/GetAllTransactionsCategory.js";
+import { GetTransactionCategoryById } from "../../../application/transaction/use-cases/GetTransactionCategoryById.js";
+import { UpdateTransactionCategory } from "../../../application/transaction/use-cases/UpdateTransactionCategory.js";
+import type { TransactionType } from "../../../domain/transaction/enums/TransactionType.js";
 import { db } from "../../database/drizzle/db.js";
 import { TransactionCategoryMapper } from "../../database/mappers/TransactionCategory.js";
 import { DrizzleTransactionCategoryRepository } from "../../database/repositories/DrizzleTransactionCategoryRepository.js";
+import { DrizzleTransactionRepository } from "../../database/repositories/DrizzleTransactionRepository.js";
 import { verifyJwt } from "../middlewares/verify-jwt.js";
 
 export const transactionCategoryRoutes = (_app: Hono) => {
   const app = new Hono()
     .use(verifyJwt)
     .use(
-      new Dependency((c) => new DrizzleTransactionCategoryRepository(db, c.var.jwt.sub)).middleware(
-        "transactionCategoryRepository",
-      ),
+      new Dependency((c) => new DrizzleTransactionRepository(db, c.var.jwt.sub)).middleware("transactionRepository"),
     );
 
-  app.get("/", async (c) => {
-    const { transactionCategoryRepository } = c.var;
+  const categoriesRepository = new DrizzleTransactionCategoryRepository(db);
 
-    const categories = await new GetAllTransactionsCategory(transactionCategoryRepository).execute();
+  app.get("/", async (c) => {
+    const categories = await new GetAllTransactionsCategory(categoriesRepository).execute();
 
     return c.json(categories.map(TransactionCategoryMapper.toResponseDTO));
   });
 
-  app.post("/", zValidator("json", z.object({ name: z.string() })), async (c) => {
-    const body = c.req.valid("json");
-    const { transactionCategoryRepository } = c.var;
+  app.post(
+    "/",
+    zValidator(
+      "json",
+      z.object({
+        name: z.string(),
+        icon: z.string(),
+        color: z.string(),
+        type: z.enum(["expense", "income"]),
+      }),
+    ),
+    async (c) => {
+      const body = c.req.valid("json");
 
-    const category = await new CreateTransactionCategory(transactionCategoryRepository).execute({
-      name: body.name,
-    });
+      const category = await new CreateTransactionCategory(categoriesRepository).execute({
+        name: body.name,
+        icon: body.icon,
+        color: body.color,
+        type: body.type as TransactionType,
+      });
 
-    return c.json(TransactionCategoryMapper.toResponseDTO(category));
-  });
+      return c.json(TransactionCategoryMapper.toResponseDTO(category));
+    },
+  );
 
   app.get("/:id", async (c) => {
     const { id } = c.req.param();
-    const { transactionCategoryRepository } = c.var;
 
-    const category = await new GetTransactionCategoryById(transactionCategoryRepository).execute(id);
+    const category = await new GetTransactionCategoryById(categoriesRepository).execute(id);
 
     return c.json(TransactionCategoryMapper.toResponseDTO(category));
   });
@@ -53,9 +66,8 @@ export const transactionCategoryRoutes = (_app: Hono) => {
   app.patch("/:id", zValidator("json", z.object({ name: z.string() })), async (c) => {
     const { id } = c.req.param();
     const body = c.req.valid("json");
-    const { transactionCategoryRepository } = c.var;
 
-    const category = await new UpdateTransactionCategory(transactionCategoryRepository).execute(id, {
+    const category = await new UpdateTransactionCategory(categoriesRepository).execute(id, {
       name: body.name,
     });
 
@@ -64,9 +76,9 @@ export const transactionCategoryRoutes = (_app: Hono) => {
 
   app.delete("/:id", async (c) => {
     const { id } = c.req.param();
-    const { transactionCategoryRepository } = c.var;
+    const { transactionRepository } = c.var;
 
-    await new DeleteTransactionCategory(transactionCategoryRepository).execute(id);
+    await new DeleteTransactionCategory(categoriesRepository, transactionRepository).execute(id);
 
     return c.text("Category deleted successfully", 200);
   });

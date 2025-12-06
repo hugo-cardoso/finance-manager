@@ -1,17 +1,21 @@
 import type { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
-import type { TransactionRecurrence } from "../enums/TransactionRecurrence.js";
-import type { TransactionType } from "../enums/TransactionType.js";
+import type { Bill } from "../../bill/entities/Bill.js";
 import type { TransactionCategory } from "./TransactionCategory.js";
 
 type TransactionProps = {
   id: Uuid;
-  groupId: Uuid;
+  groupId?: Uuid;
   name: string;
+  description?: string;
   category: TransactionCategory;
-  type: TransactionType;
   amount: number;
-  recurrence: TransactionRecurrence;
   date: Date;
+  bill?: Bill;
+  recurrence: "once" | "installment" | "recurring";
+  installment?: {
+    number: number;
+    total: number;
+  };
 };
 
 export class Transaction {
@@ -29,27 +33,35 @@ export class Transaction {
     return this.props.groupId;
   }
 
+  get installment() {
+    return this.props.installment;
+  }
+
   get name() {
     return this.props.name;
+  }
+
+  get description() {
+    return this.props.description;
   }
 
   get category() {
     return this.props.category;
   }
 
-  get type() {
-    return this.props.type;
-  }
-
   get amount() {
     return this.props.amount;
   }
 
-  get recurrence() {
-    return this.props.recurrence;
-  }
-
   get date() {
     return this.props.date;
+  }
+
+  get bill() {
+    return this.props.bill;
+  }
+
+  get recurrence() {
+    return this.props.recurrence;
   }
 }

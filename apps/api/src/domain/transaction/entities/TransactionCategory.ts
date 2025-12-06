@@ -1,8 +1,12 @@
 import type { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
+import type { TransactionType } from "../enums/TransactionType.js";
 
 type TransactionCategoryProps = {
   id: Uuid;
   name: string;
+  icon: string;
+  color: string;
+  type: TransactionType;
 };
 
 export class TransactionCategory {
@@ -18,6 +22,18 @@ export class TransactionCategory {
 
   get name() {
     return this.props.name;
+  }
+
+  get icon() {
+    return this.props.icon;
+  }
+
+  get color() {
+    return this.props.color;
+  }
+
+  get type() {
+    return this.props.type;
   }
 
   setName(name: string) {

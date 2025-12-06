@@ -1,25 +1,14 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import ky, { type KyInstance } from "ky";
 
+import type { AuthOutput, IAuthService, SignUpInput } from "../../application/interfaces/IAuthService.js";
+
 type SupabaseConfig = {
   url: string;
   anonKey: string;
 };
 
-type AuthResponse = {
-  access_token: string;
-  refresh_token: string;
-  expires_at: number;
-};
-
-type SignUpData = {
-  email: string;
-  password: string;
-  first_name: string;
-  last_name: string;
-};
-
-export class SupabaseAuthService {
+export class SupabaseAuthService implements IAuthService {
   private readonly supabase: SupabaseClient;
   private readonly authApi: KyInstance;
 
@@ -34,7 +23,7 @@ export class SupabaseAuthService {
     });
   }
 
-  async signIn(email: string, password: string): Promise<AuthResponse> {
+  async signIn(email: string, password: string): Promise<AuthOutput> {
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email,
       password,
@@ -51,19 +40,20 @@ export class SupabaseAuthService {
     };
   }
 
-  async signUp(data: SignUpData): Promise<void> {
+  async signUp(data: SignUpInput): Promise<void> {
     const { error } = await this.supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
         data: {
-          first_name: data.first_name,
-          last_name: data.last_name,
+          first_name: data.firstName,
+          last_name: data.lastName,
         },
       },
     });
 
     if (error) {
+      console.log(error);
       throw new Error(error.message);
     }
   }
@@ -91,9 +81,9 @@ export class SupabaseAuthService {
     }
   }
 
-  async refreshToken(refreshToken: string): Promise<AuthResponse> {
+  async refreshToken(refreshToken: string): Promise<AuthOutput> {
     const data = await this.authApi
-      .post<AuthResponse>("token", {
+      .post<AuthOutput>("token", {
         searchParams: {
           grant_type: "refresh_token",
         },

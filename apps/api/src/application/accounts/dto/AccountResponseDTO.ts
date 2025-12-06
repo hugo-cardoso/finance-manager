@@ -1,4 +1,4 @@
-export type UserResponseDTO = {
+export type AccountResponseDTO = {
   id: string;
   email: string;
   first_name: string;

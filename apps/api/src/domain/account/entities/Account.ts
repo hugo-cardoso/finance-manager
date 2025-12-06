@@ -1,18 +1,18 @@
 import type { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
 import type { Email } from "../value-objects/Email.js";
 
-type UserProps = {
+type AccountProps = {
   id: Uuid;
   email: Email;
   firstName: string;
   lastName: string;
 };
 
-export class User {
-  private constructor(private props: UserProps) {}
+export class Account {
+  private constructor(private props: AccountProps) {}
 
-  static create(props: UserProps) {
-    return new User(props);
+  static create(props: AccountProps) {
+    return new Account(props);
   }
 
   get id() {
