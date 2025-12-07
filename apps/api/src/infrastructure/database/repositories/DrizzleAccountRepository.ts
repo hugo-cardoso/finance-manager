@@ -1,6 +1,6 @@
-import type { Account } from "@domain/account/entities/Account.js";
-import type { IAccountRepository } from "@domain/account/repositories/IAccountRepository.js";
 import { eq } from "drizzle-orm";
+import type { Account } from "#domain/account/entities/Account.js";
+import type { IAccountRepository } from "#domain/account/repositories/IAccountRepository.js";
 import type { DrizzleDB } from "../drizzle/db.js";
 import { accountTable } from "../drizzle/schema/account.js";
 import { AccountMapper } from "../mappers/AccountMapper.js";

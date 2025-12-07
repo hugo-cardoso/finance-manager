@@ -1,6 +1,6 @@
-import type { AuthOutput, IAuthService, SignUpInput } from "@application/interfaces/IAuthService.js";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import ky, { type KyInstance } from "ky";
+import type { AuthOutput, IAuthService, SignUpInput } from "#application/interfaces/IAuthService.js";
 
 type SupabaseConfig = {
   url: string;

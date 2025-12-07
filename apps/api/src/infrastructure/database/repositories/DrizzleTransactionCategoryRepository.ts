@@ -1,9 +1,9 @@
-import type { TransactionCategory } from "@domain/transaction/entities/TransactionCategory.js";
-import type { ITransactionCategoryRepository } from "@domain/transaction/repositories/ITransactionCategoryRepository.js";
-import type { DrizzleDB } from "@infrastructure/database/drizzle/db.js";
-import { transactionCategoryTable } from "@infrastructure/database/drizzle/schema/transaction-category.js";
-import { TransactionCategoryMapper } from "@infrastructure/database/mappers/TransactionCategory.js";
 import { eq, inArray } from "drizzle-orm";
+import type { TransactionCategory } from "#domain/transaction/entities/TransactionCategory.js";
+import type { ITransactionCategoryRepository } from "#domain/transaction/repositories/ITransactionCategoryRepository.js";
+import type { DrizzleDB } from "#infrastructure/database/drizzle/db.js";
+import { transactionCategoryTable } from "#infrastructure/database/drizzle/schema/transaction-category.js";
+import { TransactionCategoryMapper } from "#infrastructure/database/mappers/TransactionCategory.js";
 
 export class DrizzleTransactionCategoryRepository implements ITransactionCategoryRepository {
   constructor(private readonly db: DrizzleDB) {}

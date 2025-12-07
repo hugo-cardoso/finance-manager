@@ -12,7 +12,7 @@
     },
     "api#build": {
       "dependsOn": ["type-check", "lint"],
-      "outputs": ["dist/**"],
+      "outputs": [".vercel/output/**"],
       "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "lint": {},

@@ -1,4 +1,4 @@
-import type { Bill } from "@domain/bill/entities/Bill.js";
+import type { Bill } from "#domain/bill/entities/Bill.js";
 
 export interface IBillRepository {
   findAll(): Promise<Bill[]>;

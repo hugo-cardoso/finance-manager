@@ -1,4 +1,4 @@
-import type { TransactionType } from "@domain/transaction/enums/TransactionType.js";
+import type { TransactionType } from "#domain/transaction/enums/TransactionType.js";
 
 export type CreateTransactionCategoryDTO = {
   name: string;

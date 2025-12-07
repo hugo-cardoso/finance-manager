@@ -1,9 +1,9 @@
-import type { TransactionResponseDTO } from "@application/transaction/dto/TransactionResponseDTO.js";
-import { Transaction } from "@domain/transaction/entities/Transaction.js";
-import { TransactionCategory } from "@domain/transaction/entities/TransactionCategory.js";
-import type { transactionTable } from "@infrastructure/database/drizzle/schema/transaction.js";
-import { Uuid } from "@shared/domain/value-objects/Uuid.js";
 import type { InferSelectModel } from "drizzle-orm";
+import type { TransactionResponseDTO } from "#application/transaction/dto/TransactionResponseDTO.js";
+import { Transaction } from "#domain/transaction/entities/Transaction.js";
+import { TransactionCategory } from "#domain/transaction/entities/TransactionCategory.js";
+import type { transactionTable } from "#infrastructure/database/drizzle/schema/transaction.js";
+import { Uuid } from "#shared/domain/value-objects/Uuid.js";
 
 import { type BillDbModel, BillMapper } from "./BillMapper.js";
 import { type TransactionCategoryDbModel, TransactionCategoryMapper } from "./TransactionCategory.js";

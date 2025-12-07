@@ -1,6 +1,6 @@
-import type { Bill } from "@domain/bill/entities/Bill.js";
-import type { TransactionCategory } from "@domain/transaction/entities/TransactionCategory.js";
-import type { Uuid } from "@shared/domain/value-objects/Uuid.js";
+import type { Bill } from "#domain/bill/entities/Bill.js";
+import type { TransactionCategory } from "#domain/transaction/entities/TransactionCategory.js";
+import type { Uuid } from "#shared/domain/value-objects/Uuid.js";
 
 type TransactionProps = {
   id: Uuid;

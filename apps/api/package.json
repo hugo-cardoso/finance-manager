@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "tsx watch src/server.dev.ts",
     "dev:debug": "tsx watch src/server.dev.ts --inspect",
-    "build": "tsup",
+    "build": "echo 🔥",
     "lint": "biome check ./src",
     "type-check": "tsc --noEmit",
     "db:studio": "tsx node_modules/drizzle-kit/bin.cjs studio --verbose"
@@ -25,8 +25,21 @@
   "devDependencies": {
     "@types/node": "^20.11.17",
     "drizzle-kit": "^0.31.8",
-    "tsup": "^8.5.1",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
+  },
+  "imports": {
+    "#domain/*": [
+      "./src/domain/*"
+    ],
+    "#application/*": [
+      "./src/application/*"
+    ],
+    "#infrastructure/*": [
+      "./src/infrastructure/*"
+    ],
+    "#shared/*": [
+      "./src/shared/*"
+    ]
   }
 }

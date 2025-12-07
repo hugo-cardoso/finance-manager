@@ -1,9 +1,9 @@
-import { GetAccountById } from "@application/accounts/use-cases/GetAccountById.js";
-import { db } from "@infrastructure/database/drizzle/db.js";
-import { AccountMapper } from "@infrastructure/database/mappers/AccountMapper.js";
-import { DrizzleAccountRepository } from "@infrastructure/database/repositories/DrizzleAccountRepository.js";
-import { verifyJwt } from "@infrastructure/http/middlewares/verify-jwt.js";
 import { Hono } from "hono";
+import { GetAccountById } from "#application/accounts/use-cases/GetAccountById.js";
+import { db } from "#infrastructure/database/drizzle/db.js";
+import { AccountMapper } from "#infrastructure/database/mappers/AccountMapper.js";
+import { DrizzleAccountRepository } from "#infrastructure/database/repositories/DrizzleAccountRepository.js";
+import { verifyJwt } from "#infrastructure/http/middlewares/verify-jwt.js";
 
 export const userRoutes = (_app: Hono) => {
   const app = new Hono();

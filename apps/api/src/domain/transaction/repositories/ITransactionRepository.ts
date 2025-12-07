@@ -1,4 +1,4 @@
-import type { Transaction } from "@domain/transaction/entities/Transaction.js";
+import type { Transaction } from "#domain/transaction/entities/Transaction.js";
 
 export interface ITransactionRepository {
   findAll(): Promise<Transaction[]>;
