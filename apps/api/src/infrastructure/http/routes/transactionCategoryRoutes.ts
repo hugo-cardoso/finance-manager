@@ -1,30 +1,25 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { Dependency } from "hono-simple-di";
 import z from "zod";
+
 import { CreateTransactionCategory } from "#application/transaction/use-cases/CreateTransactionCategory.js";
 import { DeleteTransactionCategory } from "#application/transaction/use-cases/DeleteTransactionCategory.js";
 import { GetAllTransactionsCategory } from "#application/transaction/use-cases/GetAllTransactionsCategory.js";
 import { GetTransactionCategoryById } from "#application/transaction/use-cases/GetTransactionCategoryById.js";
 import { UpdateTransactionCategory } from "#application/transaction/use-cases/UpdateTransactionCategory.js";
 import type { TransactionType } from "#domain/transaction/enums/TransactionType.js";
-import { db } from "#infrastructure/database/drizzle/db.js";
 import { TransactionCategoryMapper } from "#infrastructure/database/mappers/TransactionCategory.js";
-import { DrizzleTransactionCategoryRepository } from "#infrastructure/database/repositories/DrizzleTransactionCategoryRepository.js";
-import { DrizzleTransactionRepository } from "#infrastructure/database/repositories/DrizzleTransactionRepository.js";
 import { verifyJwt } from "#infrastructure/http/middlewares/verify-jwt.js";
 
-export const transactionCategoryRoutes = (_app: Hono) => {
-  const app = new Hono()
-    .use(verifyJwt)
-    .use(
-      new Dependency((c) => new DrizzleTransactionRepository(db, c.var.jwt.sub)).middleware("transactionRepository"),
-    );
+import { dependencyInject } from "../middlewares/dependency-inject.js";
 
-  const categoriesRepository = new DrizzleTransactionCategoryRepository(db);
+export const transactionCategoryRoutes = (_app: Hono) => {
+  const app = new Hono().use(verifyJwt).use(dependencyInject);
 
   app.get("/", async (c) => {
-    const categories = await new GetAllTransactionsCategory(categoriesRepository).execute();
+    const { transactionCategoryRepository } = c.var;
+
+    const categories = await new GetAllTransactionsCategory(transactionCategoryRepository).execute();
 
     return c.json(categories.map(TransactionCategoryMapper.toResponseDTO));
   });
@@ -42,8 +37,9 @@ export const transactionCategoryRoutes = (_app: Hono) => {
     ),
     async (c) => {
       const body = c.req.valid("json");
+      const { transactionCategoryRepository } = c.var;
 
-      const category = await new CreateTransactionCategory(categoriesRepository).execute({
+      const category = await new CreateTransactionCategory(transactionCategoryRepository).execute({
         name: body.name,
         icon: body.icon,
         color: body.color,
@@ -56,8 +52,9 @@ export const transactionCategoryRoutes = (_app: Hono) => {
 
   app.get("/:id", async (c) => {
     const { id } = c.req.param();
+    const { transactionCategoryRepository } = c.var;
 
-    const category = await new GetTransactionCategoryById(categoriesRepository).execute(id);
+    const category = await new GetTransactionCategoryById(transactionCategoryRepository).execute(id);
 
     return c.json(TransactionCategoryMapper.toResponseDTO(category));
   });
@@ -65,8 +62,9 @@ export const transactionCategoryRoutes = (_app: Hono) => {
   app.patch("/:id", zValidator("json", z.object({ name: z.string() })), async (c) => {
     const { id } = c.req.param();
     const body = c.req.valid("json");
+    const { transactionCategoryRepository } = c.var;
 
-    const category = await new UpdateTransactionCategory(categoriesRepository).execute(id, {
+    const category = await new UpdateTransactionCategory(transactionCategoryRepository).execute(id, {
       name: body.name,
     });
 
@@ -75,9 +73,9 @@ export const transactionCategoryRoutes = (_app: Hono) => {
 
   app.delete("/:id", async (c) => {
     const { id } = c.req.param();
-    const { transactionRepository } = c.var;
+    const { transactionCategoryRepository, transactionRepository } = c.var;
 
-    await new DeleteTransactionCategory(categoriesRepository, transactionRepository).execute(id);
+    await new DeleteTransactionCategory(transactionCategoryRepository, transactionRepository).execute(id);
 
     return c.text("Category deleted successfully", 200);
   });

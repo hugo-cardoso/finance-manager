@@ -1,26 +1,18 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { Dependency } from "hono-simple-di";
 import z from "zod";
+
 import { CreateTransaction } from "#application/transaction/use-cases/CreateTransaction.js";
 import { DeleteTransaction } from "#application/transaction/use-cases/DeleteTransaction.js";
 import { GetMonthTransactions } from "#application/transaction/use-cases/GetMonthTransactions.js";
 import { GetTransactionById } from "#application/transaction/use-cases/GetTransactionById.js";
 import { TransactionMapper } from "#infrastructure/database/mappers/TransactionMapper.js";
-import { DrizzleBillRepository } from "#infrastructure/database/repositories/DrizzleBillRepository.js";
-import { DrizzleTransactionCategoryRepository } from "#infrastructure/database/repositories/DrizzleTransactionCategoryRepository.js";
-import { DrizzleTransactionRepository } from "#infrastructure/database/repositories/DrizzleTransactionRepository.js";
 
-import { db } from "../../database/drizzle/db.js";
+import { dependencyInject } from "../middlewares/dependency-inject.js";
 import { verifyJwt } from "../middlewares/verify-jwt.js";
 
 export const transactionRoutes = (_app: Hono) => {
-  const app = new Hono()
-    .use(verifyJwt)
-    .use(new Dependency((c) => new DrizzleTransactionRepository(db, c.var.jwt.sub)).middleware("transactionRepository"))
-    .use(new Dependency((c) => new DrizzleBillRepository(db, c.var.jwt.sub)).middleware("billRepository"));
-
-  const transactionCategoryRepository = new DrizzleTransactionCategoryRepository(db);
+  const app = new Hono().use(verifyJwt).use(dependencyInject);
 
   app.get(
     "/",
@@ -61,7 +53,7 @@ export const transactionRoutes = (_app: Hono) => {
     ),
     async (c) => {
       const body = c.req.valid("json");
-      const { transactionRepository, billRepository } = c.var;
+      const { transactionRepository, billRepository, transactionCategoryRepository } = c.var;
 
       const transaction = await new CreateTransaction(
         transactionRepository,

@@ -5,16 +5,22 @@ import type { ITransactionCategoryRepository } from "#domain/transaction/reposit
 import type { DrizzleDB } from "#infrastructure/database/drizzle/db.js";
 import { billTable } from "#infrastructure/database/drizzle/schema/bill.js";
 import { BillMapper } from "#infrastructure/database/mappers/BillMapper.js";
-import { DrizzleTransactionCategoryRepository } from "#infrastructure/database/repositories/DrizzleTransactionCategoryRepository.js";
+
+type BillRepositoryProps = {
+  db: DrizzleDB;
+  accountId: string;
+  transactionCategoryRepository: ITransactionCategoryRepository;
+};
 
 export class DrizzleBillRepository implements IBillRepository {
+  private readonly db: DrizzleDB;
+  private readonly accountId: string;
   private readonly transactionCategoryRepository: ITransactionCategoryRepository;
 
-  constructor(
-    private readonly db: DrizzleDB,
-    private readonly accountId: string,
-  ) {
-    this.transactionCategoryRepository = new DrizzleTransactionCategoryRepository(db);
+  constructor(readonly props: BillRepositoryProps) {
+    this.db = props.db;
+    this.accountId = props.accountId;
+    this.transactionCategoryRepository = props.transactionCategoryRepository;
   }
 
   async findAll(): Promise<Bill[]> {
