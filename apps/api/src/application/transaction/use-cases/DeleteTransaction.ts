@@ -1,4 +1,4 @@
-import type { ITransactionRepository } from "../../../domain/transaction/repositories/ITransactionRepository.js";
+import type { ITransactionRepository } from "@domain/transaction/repositories/ITransactionRepository.js";
 
 type DeleteTransactionDTO = {
   id: string;

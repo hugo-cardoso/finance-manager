@@ -1,5 +1,5 @@
-import type { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
-import type { TransactionType } from "../enums/TransactionType.js";
+import type { TransactionType } from "@domain/transaction/enums/TransactionType.js";
+import type { Uuid } from "@shared/domain/value-objects/Uuid.js";
 
 type TransactionCategoryProps = {
   id: Uuid;

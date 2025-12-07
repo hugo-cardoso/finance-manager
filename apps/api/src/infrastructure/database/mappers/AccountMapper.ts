@@ -1,9 +1,8 @@
+import { Account } from "@domain/account/entities/Account.js";
+import { Email } from "@domain/account/value-objects/Email.js";
+import type { accountTable } from "@infrastructure/database/drizzle/schema/account.js";
+import { Uuid } from "@shared/domain/value-objects/Uuid.js";
 import type { InferSelectModel } from "drizzle-orm";
-
-import { Account } from "../../../domain/account/entities/Account.js";
-import { Email } from "../../../domain/account/value-objects/Email.js";
-import { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
-import type { accountTable } from "../drizzle/schema/account.js";
 
 type AccountPersistence = InferSelectModel<typeof accountTable>;
 

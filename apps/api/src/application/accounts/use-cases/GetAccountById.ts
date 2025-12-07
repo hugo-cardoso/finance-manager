@@ -1,5 +1,5 @@
-import type { Account } from "../../../domain/account/entities/Account.js";
-import type { IAccountRepository } from "../../../domain/account/repositories/IAccountRepository.js";
+import type { Account } from "@domain/account/entities/Account.js";
+import type { IAccountRepository } from "@domain/account/repositories/IAccountRepository.js";
 
 export class GetAccountById {
   constructor(private readonly accountRepository: IAccountRepository) {}

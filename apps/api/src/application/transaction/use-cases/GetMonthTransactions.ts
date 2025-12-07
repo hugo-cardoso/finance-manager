@@ -1,8 +1,8 @@
-import type { Bill } from "../../../domain/bill/entities/Bill.js";
-import type { IBillRepository } from "../../../domain/bill/repositories/iBillRepository.js";
-import { Transaction } from "../../../domain/transaction/entities/Transaction.js";
-import type { ITransactionRepository } from "../../../domain/transaction/repositories/ITransactionRepository.js";
-import { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
+import type { Bill } from "@domain/bill/entities/Bill.js";
+import type { IBillRepository } from "@domain/bill/repositories/iBillRepository.js";
+import { Transaction } from "@domain/transaction/entities/Transaction.js";
+import type { ITransactionRepository } from "@domain/transaction/repositories/ITransactionRepository.js";
+import { Uuid } from "@shared/domain/value-objects/Uuid.js";
 
 type GetMonthTransactionsDTO = {
   month: number;

@@ -1,5 +1,5 @@
-import type { ITransactionCategoryRepository } from "../../../domain/transaction/repositories/ITransactionCategoryRepository.js";
-import type { ITransactionRepository } from "../../../domain/transaction/repositories/ITransactionRepository.js";
+import type { ITransactionCategoryRepository } from "@domain/transaction/repositories/ITransactionCategoryRepository.js";
+import type { ITransactionRepository } from "@domain/transaction/repositories/ITransactionRepository.js";
 
 export class DeleteTransactionCategory {
   constructor(

@@ -1,8 +1,8 @@
 import { zValidator } from "@hono/zod-validator";
+import { SupabaseAuthService } from "@infrastructure/auth/SupabaseAuthService.js";
+
 import { Hono } from "hono";
 import z from "zod";
-
-import { SupabaseAuthService } from "../../auth/SupabaseAuthService.js";
 
 export const authRoutes = (_app: Hono) => {
   const app = new Hono();

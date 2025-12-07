@@ -1,19 +1,18 @@
+import { CreateTransactionCategory } from "@application/transaction/use-cases/CreateTransactionCategory.js";
+import { DeleteTransactionCategory } from "@application/transaction/use-cases/DeleteTransactionCategory.js";
+import { GetAllTransactionsCategory } from "@application/transaction/use-cases/GetAllTransactionsCategory.js";
+import { GetTransactionCategoryById } from "@application/transaction/use-cases/GetTransactionCategoryById.js";
+import { UpdateTransactionCategory } from "@application/transaction/use-cases/UpdateTransactionCategory.js";
+import type { TransactionType } from "@domain/transaction/enums/TransactionType.js";
 import { zValidator } from "@hono/zod-validator";
+import { db } from "@infrastructure/database/drizzle/db.js";
+import { TransactionCategoryMapper } from "@infrastructure/database/mappers/TransactionCategory.js";
+import { DrizzleTransactionCategoryRepository } from "@infrastructure/database/repositories/DrizzleTransactionCategoryRepository.js";
+import { DrizzleTransactionRepository } from "@infrastructure/database/repositories/DrizzleTransactionRepository.js";
+import { verifyJwt } from "@infrastructure/http/middlewares/verify-jwt.js";
 import { Hono } from "hono";
 import { Dependency } from "hono-simple-di";
 import z from "zod";
-
-import { CreateTransactionCategory } from "../../../application/transaction/use-cases/CreateTransactionCategory.js";
-import { DeleteTransactionCategory } from "../../../application/transaction/use-cases/DeleteTransactionCategory.js";
-import { GetAllTransactionsCategory } from "../../../application/transaction/use-cases/GetAllTransactionsCategory.js";
-import { GetTransactionCategoryById } from "../../../application/transaction/use-cases/GetTransactionCategoryById.js";
-import { UpdateTransactionCategory } from "../../../application/transaction/use-cases/UpdateTransactionCategory.js";
-import type { TransactionType } from "../../../domain/transaction/enums/TransactionType.js";
-import { db } from "../../database/drizzle/db.js";
-import { TransactionCategoryMapper } from "../../database/mappers/TransactionCategory.js";
-import { DrizzleTransactionCategoryRepository } from "../../database/repositories/DrizzleTransactionCategoryRepository.js";
-import { DrizzleTransactionRepository } from "../../database/repositories/DrizzleTransactionRepository.js";
-import { verifyJwt } from "../middlewares/verify-jwt.js";
 
 export const transactionCategoryRoutes = (_app: Hono) => {
   const app = new Hono()

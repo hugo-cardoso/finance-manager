@@ -1,11 +1,11 @@
+import type { Transaction } from "@domain/transaction/entities/Transaction.js";
+import type { ITransactionCategoryRepository } from "@domain/transaction/repositories/ITransactionCategoryRepository.js";
+import type { ITransactionRepository } from "@domain/transaction/repositories/ITransactionRepository.js";
+import type { DrizzleDB } from "@infrastructure/database/drizzle/db.js";
+import { transactionTable } from "@infrastructure/database/drizzle/schema/transaction.js";
+import { TransactionMapper } from "@infrastructure/database/mappers/TransactionMapper.js";
 import { and, eq, gte, lte } from "drizzle-orm";
 
-import type { Transaction } from "../../../domain/transaction/entities/Transaction.js";
-import type { ITransactionCategoryRepository } from "../../../domain/transaction/repositories/ITransactionCategoryRepository.js";
-import type { ITransactionRepository } from "../../../domain/transaction/repositories/ITransactionRepository.js";
-import type { DrizzleDB } from "../drizzle/db.js";
-import { transactionTable } from "../drizzle/schema/transaction.js";
-import { TransactionMapper } from "../mappers/TransactionMapper.js";
 import { DrizzleTransactionCategoryRepository } from "./DrizzleTransactionCategoryRepository.js";
 
 export class DrizzleTransactionRepository implements ITransactionRepository {

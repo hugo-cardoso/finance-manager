@@ -1,11 +1,11 @@
+import type { CreateTransactionDTO } from "@application/transaction/dto/CreateTransactionDTO.js";
+import { Bill } from "@domain/bill/entities/Bill.js";
+import type { IBillRepository } from "@domain/bill/repositories/iBillRepository.js";
+import { Transaction } from "@domain/transaction/entities/Transaction.js";
+import type { ITransactionCategoryRepository } from "@domain/transaction/repositories/ITransactionCategoryRepository.js";
+import type { ITransactionRepository } from "@domain/transaction/repositories/ITransactionRepository.js";
+import { Uuid } from "@shared/domain/value-objects/Uuid.js";
 import { addMonths } from "date-fns";
-import { Bill } from "../../../domain/bill/entities/Bill.js";
-import type { IBillRepository } from "../../../domain/bill/repositories/iBillRepository.js";
-import { Transaction } from "../../../domain/transaction/entities/Transaction.js";
-import type { ITransactionCategoryRepository } from "../../../domain/transaction/repositories/ITransactionCategoryRepository.js";
-import type { ITransactionRepository } from "../../../domain/transaction/repositories/ITransactionRepository.js";
-import { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
-import type { CreateTransactionDTO } from "../dto/CreateTransactionDTO.js";
 
 export class CreateTransaction {
   constructor(

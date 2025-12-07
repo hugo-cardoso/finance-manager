@@ -1,4 +1,4 @@
-import type { Account } from "../entities/Account.js";
+import type { Account } from "@domain/account/entities/Account.js";
 
 export interface IAccountRepository {
   findAll(): Promise<Account[]>;

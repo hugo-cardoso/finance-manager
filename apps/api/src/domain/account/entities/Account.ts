@@ -1,5 +1,5 @@
-import type { Uuid } from "../../../shared/domain/value-objects/Uuid.js";
-import type { Email } from "../value-objects/Email.js";
+import type { Email } from "@domain/account/value-objects/Email.js";
+import type { Uuid } from "@shared/domain/value-objects/Uuid.js";
 
 type AccountProps = {
   id: Uuid;
