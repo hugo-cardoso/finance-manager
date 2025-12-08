@@ -1,4 +1,4 @@
-import { and, eq, gte, lte } from "drizzle-orm";
+import { and, eq, gte, inArray, lte, type SQL } from "drizzle-orm";
 
 import type { Transaction } from "#domain/transaction/entities/Transaction.js";
 import type { ITransactionCategoryRepository } from "#domain/transaction/repositories/ITransactionCategoryRepository.js";
@@ -69,6 +69,29 @@ export class DrizzleTransactionRepository implements ITransactionRepository {
   async findByCategoryId(categoryId: string): Promise<Transaction[]> {
     const transactions = await this.db.query.transactionTable.findMany({
       where: and(eq(transactionTable.category_id, categoryId), eq(transactionTable.account_id, this.accountId)),
+      with: {
+        category: true,
+        bill: true,
+      },
+    });
+
+    return transactions.map((transaction) => {
+      return TransactionMapper.toEntity(transaction, transaction.category, transaction.bill || undefined);
+    });
+  }
+
+  async findByDateRange(startDate: Date, endDate?: Date): Promise<Transaction[]> {
+    const conditions: SQL[] = [
+      eq(transactionTable.account_id, this.accountId),
+      gte(transactionTable.date, startDate.toISOString().split("T")[0]),
+    ];
+
+    if (endDate) {
+      conditions.push(lte(transactionTable.date, endDate.toISOString().split("T")[0]));
+    }
+
+    const transactions = await this.db.query.transactionTable.findMany({
+      where: and(...conditions),
       with: {
         category: true,
         bill: true,
@@ -169,6 +192,12 @@ export class DrizzleTransactionRepository implements ITransactionRepository {
       .where(and(eq(transactionTable.id, id), eq(transactionTable.account_id, this.accountId)));
   }
 
+  async deleteMany(ids: string[]): Promise<void> {
+    await this.db
+      .delete(transactionTable)
+      .where(and(inArray(transactionTable.id, ids), eq(transactionTable.account_id, this.accountId)));
+  }
+
   async deleteByGroupId(groupId: string): Promise<void> {
     await this.db
       .delete(transactionTable)
@@ -179,5 +208,19 @@ export class DrizzleTransactionRepository implements ITransactionRepository {
     await this.db
       .delete(transactionTable)
       .where(and(eq(transactionTable.bill_id, billId), eq(transactionTable.account_id, this.accountId)));
+  }
+
+  async findByBillId(billId: string): Promise<Transaction[]> {
+    const transactions = await this.db.query.transactionTable.findMany({
+      where: and(eq(transactionTable.bill_id, billId), eq(transactionTable.account_id, this.accountId)),
+      with: {
+        category: true,
+        bill: true,
+      },
+    });
+
+    return transactions.map((transaction) => {
+      return TransactionMapper.toEntity(transaction, transaction.category, transaction.bill || undefined);
+    });
   }
 }

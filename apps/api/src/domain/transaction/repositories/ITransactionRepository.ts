@@ -6,9 +6,10 @@ export interface ITransactionRepository {
   findByCategoryId(categoryId: string): Promise<Transaction[]>;
   findByGroupId(groupId: string): Promise<Transaction[]>;
   findByMonthAndYear(month: number, year: number): Promise<Transaction[]>;
+  findByBillId(billId: string): Promise<Transaction[]>;
+  findByDateRange(startDate: Date, endDate?: Date): Promise<Transaction[]>;
   create(data: Transaction): Promise<Transaction>;
   createMany(data: Transaction[]): Promise<Transaction[]>;
   delete(id: string): Promise<void>;
-  deleteByGroupId(groupId: string): Promise<void>;
-  deleteByBillId(billId: string): Promise<void>;
+  deleteMany(ids: string[]): Promise<void>;
 }

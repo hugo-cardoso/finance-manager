@@ -1,8 +1,10 @@
 import { addMonths } from "date-fns";
+
 import type { CreateTransactionDTO } from "#application/transaction/dto/CreateTransactionDTO.js";
 import { Bill } from "#domain/bill/entities/Bill.js";
 import type { IBillRepository } from "#domain/bill/repositories/iBillRepository.js";
 import { Transaction } from "#domain/transaction/entities/Transaction.js";
+import type { TransactionCategory } from "#domain/transaction/entities/TransactionCategory.js";
 import type { ITransactionCategoryRepository } from "#domain/transaction/repositories/ITransactionCategoryRepository.js";
 import type { ITransactionRepository } from "#domain/transaction/repositories/ITransactionRepository.js";
 import { Uuid } from "#shared/domain/value-objects/Uuid.js";
@@ -21,70 +23,90 @@ export class CreateTransaction {
       throw new Error("Category not found");
     }
 
-    if (data.recurrence === "recurring") {
-      const dayOfMonth = data.date.getDate();
+    switch (data.recurrence) {
+      case "recurring":
+        return this.createRecurringTransaction(data, category);
+      case "installment":
+        return this.createInstallmentTransaction(data, category);
+      case "once":
+        return this.createOneTimeTransaction(data, category);
+    }
+  }
 
-      const bill = Bill.create({
-        id: Uuid.generate(),
-        name: data.name,
-        description: data.description,
-        amount: data.amount,
-        dayOfMonth: dayOfMonth,
-        category: category,
-        startDate: data.date,
-        endDate: data.endDate,
-        isActive: true,
-      });
+  private async createRecurringTransaction(
+    data: CreateTransactionDTO,
+    category: TransactionCategory,
+  ): Promise<Transaction> {
+    const dayOfMonth = data.date.getDate();
 
+    const bill = Bill.create({
+      id: Uuid.generate(),
+      name: data.name,
+      description: data.description,
+      amount: data.amount,
+      dayOfMonth: dayOfMonth,
+      category: category,
+      startDate: data.date,
+      endDate: data.endDate,
+      isActive: true,
+    });
+
+    const transaction = Transaction.create({
+      id: Uuid.generate(),
+      name: data.name,
+      description: data.description,
+      category: category,
+      amount: data.amount,
+      date: data.date,
+      bill: bill,
+      recurrence: "recurring",
+    });
+
+    await this.billRepository.create(bill);
+
+    return this.transactionRepository.create(transaction);
+  }
+
+  private async createInstallmentTransaction(
+    data: CreateTransactionDTO,
+    category: TransactionCategory,
+  ): Promise<Transaction> {
+    if (!data.installments || data.installments < 2) {
+      throw new Error("Installments are required for installment recurrence");
+    }
+
+    const transactions: Transaction[] = [];
+    const amountPerInstallment = (data.amount / data.installments).toFixed(2);
+    const groupId = Uuid.generate();
+
+    for (let i = 1; i <= data.installments; i++) {
       const transaction = Transaction.create({
         id: Uuid.generate(),
+        groupId: groupId,
         name: data.name,
         description: data.description,
         category: category,
-        amount: data.amount,
-        date: data.date,
-        bill: bill,
-        recurrence: "recurring",
+        amount: Number(amountPerInstallment),
+        date: addMonths(data.date, i - 1),
+        installment: {
+          number: i,
+          total: data.installments,
+        },
+        recurrence: "installment",
       });
 
-      await this.billRepository.create(bill);
-
-      return this.transactionRepository.create(transaction);
+      transactions.push(transaction);
     }
 
-    if (data.recurrence === "installment") {
-      if (!data.installments || data.installments < 2) {
-        throw new Error("Installments are required for installment recurrence");
-      }
+    const response = await this.transactionRepository.createMany(transactions);
 
-      const transactions: Transaction[] = [];
-      const amountPerInstallment = (data.amount / data.installments).toFixed(2);
-      const groupId = Uuid.generate();
+    return response[0];
+  }
 
-      for (let i = 1; i <= data.installments; i++) {
-        const transaction = Transaction.create({
-          id: Uuid.generate(),
-          groupId: groupId,
-          name: data.name,
-          description: data.description,
-          category: category,
-          amount: Number(amountPerInstallment),
-          date: addMonths(data.date, i - 1),
-          installment: {
-            number: i,
-            total: data.installments,
-          },
-          recurrence: "installment",
-        });
-
-        transactions.push(transaction);
-      }
-
-      const response = await this.transactionRepository.createMany(transactions);
-
-      return response[0];
-    }
-
+  private async createOneTimeTransaction(
+    data: CreateTransactionDTO,
+    category: TransactionCategory,
+  ): Promise<Transaction> {
     const transaction = Transaction.create({
       id: Uuid.generate(),
       name: data.name,

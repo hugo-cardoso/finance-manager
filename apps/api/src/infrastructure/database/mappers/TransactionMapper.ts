@@ -30,7 +30,12 @@ export class TransactionMapper {
       category: category,
       amount: Number(dbModel.amount),
       date: new Date(dbModel.date),
-      installment: undefined,
+      installment: dbModel.installment_group_id
+        ? {
+            number: dbModel.installment_number!,
+            total: dbModel.total_installments!,
+          }
+        : undefined,
       bill: bill,
       recurrence: dbModel.recurrence,
     });
