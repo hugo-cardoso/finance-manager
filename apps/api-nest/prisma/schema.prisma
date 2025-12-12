@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TransactionRecurrence {
+  single
+  installment
+  recurrence
+
+  @@map("recurrence_type")
+}
+
+enum TransactionStatus {
+  active
+  deleted
+
+  @@map("transaction_status")
+}
+
+enum TransactionType {
+  expense
+  income
+
+  @@map("transaction_type")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  firstName    String        @map("first_name")
+  lastName     String        @map("last_name")
+  transactions Transaction[]
+
+  @@map("users")
+}
+
+model Category {
+  id           String          @id @default(uuid())
+  name         String
+  icon         String
+  type         TransactionType
+  transactions Transaction[]
+
+  @@map("transactions_categories")
+}
+
+model Transaction {
+  id String @id @default(uuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  categoryId String   @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  name   String
+  amount Float
+  date   DateTime @db.Date
+
+  recurrenceType TransactionRecurrence @map("recurrence_type")
+  recurrenceId   String?               @map("recurrence_id")
+  recurrence     RecurrenceRule?       @relation(fields: [recurrenceId], references: [id])
+
+  installmentId     String?           @map("installment_id")
+  installmentNumber Int?              @map("installment_number")
+  installmentTotal  Int?              @map("installment_total")
+  status            TransactionStatus
+
+  @@map("transactions")
+}
+
+model RecurrenceRule {
+  id           String        @id @default(uuid())
+  userId       String        @map("user_id")
+  categoryId   String        @map("category_id")
+  name         String
+  amount       Float
+  dayOfMonth   Int           @map("day_of_month")
+  isActive     Boolean       @map("is_active")
+  transactions Transaction[]
+
+  @@map("recurrence_rules")
+}
