@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/user/")({
 function RouteComponent() {
   const { data: user } = useSuspenseUser();
 
-  const fullName = `${user.first_name} ${user.last_name}`.trim();
+  const fullName = user.name;
 
   return (
     <AppSidebarContent title="Conta">

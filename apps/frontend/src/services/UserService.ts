@@ -3,13 +3,12 @@ import { api } from "@/lib/api";
 type UserResponse = {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  name: string;
 };
 
 export class UserService {
   static async getUser() {
-    const response = await api.get<UserResponse>("user/me");
+    const response = await api.get<UserResponse>("users/me");
     return response.json();
   }
 }

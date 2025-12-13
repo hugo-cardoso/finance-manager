@@ -30,7 +30,7 @@ export function GreetingWidget({ className, ...props }: React.ComponentProps<"di
   const { data: user } = useUser();
 
   const userName = useMemo(() => {
-    return user ? `${user.first_name} ${user.last_name}`.trim() : "Usuário";
+    return user ? user.name : "Usuário";
   }, [user]);
 
   const greeting = useMemo(() => getGreeting(), []);

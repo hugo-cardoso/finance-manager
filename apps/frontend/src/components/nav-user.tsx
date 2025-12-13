@@ -19,7 +19,7 @@ export function NavUser() {
 
   const { data: user } = useSuspenseUser();
 
-  const name = `${user.first_name} ${user.last_name}`;
+  const name = user.name;
   const initials = name
     .split(" ")
     .map((name) => name[0])
