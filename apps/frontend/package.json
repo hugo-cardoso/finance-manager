@@ -8,8 +8,7 @@
 		"serve": "vite preview",
 		"lint": "biome check ./src",
 		"test": "vitest run",
-    "type-check": "tsc --noEmit",
-    "start": "serve dist -s -n -L -p 5173"
+    "type-check": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@dnd-kit/core": "^6.3.1",
