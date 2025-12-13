@@ -1,12 +1,12 @@
 import { Body, Controller, Get, NotFoundException, Patch, UseGuards, ValidationPipe } from "@nestjs/common";
 import { AuthUserId } from "@src/common/decorator/auth-user-id.decorator";
-import { AuthGuard } from "@src/modules/auth/auth.guard";
+import { JwtAuthGuard } from "@src/modules/auth/guards/jwt-auth.guard";
 
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersService } from "./users.service";
 
 @Controller("users")
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

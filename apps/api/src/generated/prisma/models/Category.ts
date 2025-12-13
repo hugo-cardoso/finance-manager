@@ -170,7 +170,7 @@ export type CategoryWhereInput = {
   AND?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   OR?: Prisma.CategoryWhereInput[]
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
-  id?: Prisma.StringFilter<"Category"> | string
+  id?: Prisma.UuidFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
   icon?: Prisma.StringFilter<"Category"> | string
   type?: Prisma.EnumTransactionTypeFilter<"Category"> | $Enums.TransactionType
@@ -210,7 +210,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
   AND?: Prisma.CategoryScalarWhereWithAggregatesInput | Prisma.CategoryScalarWhereWithAggregatesInput[]
   OR?: Prisma.CategoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CategoryScalarWhereWithAggregatesInput | Prisma.CategoryScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Category"> | string
   name?: Prisma.StringWithAggregatesFilter<"Category"> | string
   icon?: Prisma.StringWithAggregatesFilter<"Category"> | string
   type?: Prisma.EnumTransactionTypeWithAggregatesFilter<"Category"> | $Enums.TransactionType

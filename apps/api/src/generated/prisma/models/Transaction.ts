@@ -268,15 +268,15 @@ export type TransactionWhereInput = {
   AND?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
   OR?: Prisma.TransactionWhereInput[]
   NOT?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
-  id?: Prisma.StringFilter<"Transaction"> | string
-  userId?: Prisma.StringFilter<"Transaction"> | string
-  categoryId?: Prisma.StringFilter<"Transaction"> | string
+  id?: Prisma.UuidFilter<"Transaction"> | string
+  userId?: Prisma.UuidFilter<"Transaction"> | string
+  categoryId?: Prisma.UuidFilter<"Transaction"> | string
   name?: Prisma.StringFilter<"Transaction"> | string
   amount?: Prisma.FloatFilter<"Transaction"> | number
   date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   recurrenceType?: Prisma.EnumTransactionRecurrenceFilter<"Transaction"> | $Enums.TransactionRecurrence
-  recurrenceId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  installmentId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  recurrenceId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  installmentId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   installmentNumber?: Prisma.IntNullableFilter<"Transaction"> | number | null
   installmentTotal?: Prisma.IntNullableFilter<"Transaction"> | number | null
   status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
@@ -308,14 +308,14 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
   OR?: Prisma.TransactionWhereInput[]
   NOT?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
-  userId?: Prisma.StringFilter<"Transaction"> | string
-  categoryId?: Prisma.StringFilter<"Transaction"> | string
+  userId?: Prisma.UuidFilter<"Transaction"> | string
+  categoryId?: Prisma.UuidFilter<"Transaction"> | string
   name?: Prisma.StringFilter<"Transaction"> | string
   amount?: Prisma.FloatFilter<"Transaction"> | number
   date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   recurrenceType?: Prisma.EnumTransactionRecurrenceFilter<"Transaction"> | $Enums.TransactionRecurrence
-  recurrenceId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  installmentId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  recurrenceId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  installmentId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   installmentNumber?: Prisma.IntNullableFilter<"Transaction"> | number | null
   installmentTotal?: Prisma.IntNullableFilter<"Transaction"> | number | null
   status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
@@ -348,15 +348,15 @@ export type TransactionScalarWhereWithAggregatesInput = {
   AND?: Prisma.TransactionScalarWhereWithAggregatesInput | Prisma.TransactionScalarWhereWithAggregatesInput[]
   OR?: Prisma.TransactionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TransactionScalarWhereWithAggregatesInput | Prisma.TransactionScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
-  categoryId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Transaction"> | string
+  userId?: Prisma.UuidWithAggregatesFilter<"Transaction"> | string
+  categoryId?: Prisma.UuidWithAggregatesFilter<"Transaction"> | string
   name?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   amount?: Prisma.FloatWithAggregatesFilter<"Transaction"> | number
   date?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   recurrenceType?: Prisma.EnumTransactionRecurrenceWithAggregatesFilter<"Transaction"> | $Enums.TransactionRecurrence
-  recurrenceId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
-  installmentId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  recurrenceId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
+  installmentId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
   installmentNumber?: Prisma.IntNullableWithAggregatesFilter<"Transaction"> | number | null
   installmentTotal?: Prisma.IntNullableWithAggregatesFilter<"Transaction"> | number | null
   status?: Prisma.EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
@@ -747,15 +747,15 @@ export type TransactionScalarWhereInput = {
   AND?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
   OR?: Prisma.TransactionScalarWhereInput[]
   NOT?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
-  id?: Prisma.StringFilter<"Transaction"> | string
-  userId?: Prisma.StringFilter<"Transaction"> | string
-  categoryId?: Prisma.StringFilter<"Transaction"> | string
+  id?: Prisma.UuidFilter<"Transaction"> | string
+  userId?: Prisma.UuidFilter<"Transaction"> | string
+  categoryId?: Prisma.UuidFilter<"Transaction"> | string
   name?: Prisma.StringFilter<"Transaction"> | string
   amount?: Prisma.FloatFilter<"Transaction"> | number
   date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   recurrenceType?: Prisma.EnumTransactionRecurrenceFilter<"Transaction"> | $Enums.TransactionRecurrence
-  recurrenceId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  installmentId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  recurrenceId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  installmentId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   installmentNumber?: Prisma.IntNullableFilter<"Transaction"> | number | null
   installmentTotal?: Prisma.IntNullableFilter<"Transaction"> | number | null
   status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus

@@ -3,7 +3,7 @@ import { createParamDecorator, ExecutionContext, UnauthorizedException } from "@
 export const AuthUserId = createParamDecorator<undefined>((_data, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();
 
-  const userId = request.userId;
+  const userId = request.user?.userId;
 
   if (!userId) {
     throw new UnauthorizedException();

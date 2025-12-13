@@ -37,8 +37,9 @@ enum TransactionType {
 }
 
 model User {
-  id           String        @id @default(uuid())
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email        String        @unique
+  password     String
   firstName    String        @map("first_name")
   lastName     String        @map("last_name")
   transactions Transaction[]
@@ -47,7 +48,7 @@ model User {
 }
 
 model Category {
-  id           String          @id @default(uuid())
+  id           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
   icon         String
   type         TransactionType
@@ -57,12 +58,12 @@ model Category {
 }
 
 model Transaction {
-  id String @id @default(uuid())
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  userId String @map("user_id")
+  userId String @map("user_id") @db.Uuid
   user   User   @relation(fields: [userId], references: [id])
 
-  categoryId String   @map("category_id")
+  categoryId String   @map("category_id") @db.Uuid
   category   Category @relation(fields: [categoryId], references: [id])
 
   name   String
@@ -70,10 +71,10 @@ model Transaction {
   date   DateTime @db.Date
 
   recurrenceType TransactionRecurrence @map("recurrence_type")
-  recurrenceId   String?               @map("recurrence_id")
+  recurrenceId   String?               @map("recurrence_id") @db.Uuid
   recurrence     RecurrenceRule?       @relation(fields: [recurrenceId], references: [id])
 
-  installmentId     String?           @map("installment_id")
+  installmentId     String?           @map("installment_id") @db.Uuid
   installmentNumber Int?              @map("installment_number")
   installmentTotal  Int?              @map("installment_total")
   status            TransactionStatus
@@ -82,9 +83,9 @@ model Transaction {
 }
 
 model RecurrenceRule {
-  id           String        @id @default(uuid())
-  userId       String        @map("user_id")
-  categoryId   String        @map("category_id")
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  categoryId   String        @map("category_id") @db.Uuid
   name         String
   amount       Float
   dayOfMonth   Int           @map("day_of_month")

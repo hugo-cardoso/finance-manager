@@ -229,9 +229,9 @@ export type RecurrenceRuleWhereInput = {
   AND?: Prisma.RecurrenceRuleWhereInput | Prisma.RecurrenceRuleWhereInput[]
   OR?: Prisma.RecurrenceRuleWhereInput[]
   NOT?: Prisma.RecurrenceRuleWhereInput | Prisma.RecurrenceRuleWhereInput[]
-  id?: Prisma.StringFilter<"RecurrenceRule"> | string
-  userId?: Prisma.StringFilter<"RecurrenceRule"> | string
-  categoryId?: Prisma.StringFilter<"RecurrenceRule"> | string
+  id?: Prisma.UuidFilter<"RecurrenceRule"> | string
+  userId?: Prisma.UuidFilter<"RecurrenceRule"> | string
+  categoryId?: Prisma.UuidFilter<"RecurrenceRule"> | string
   name?: Prisma.StringFilter<"RecurrenceRule"> | string
   amount?: Prisma.FloatFilter<"RecurrenceRule"> | number
   dayOfMonth?: Prisma.IntFilter<"RecurrenceRule"> | number
@@ -255,8 +255,8 @@ export type RecurrenceRuleWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.RecurrenceRuleWhereInput | Prisma.RecurrenceRuleWhereInput[]
   OR?: Prisma.RecurrenceRuleWhereInput[]
   NOT?: Prisma.RecurrenceRuleWhereInput | Prisma.RecurrenceRuleWhereInput[]
-  userId?: Prisma.StringFilter<"RecurrenceRule"> | string
-  categoryId?: Prisma.StringFilter<"RecurrenceRule"> | string
+  userId?: Prisma.UuidFilter<"RecurrenceRule"> | string
+  categoryId?: Prisma.UuidFilter<"RecurrenceRule"> | string
   name?: Prisma.StringFilter<"RecurrenceRule"> | string
   amount?: Prisma.FloatFilter<"RecurrenceRule"> | number
   dayOfMonth?: Prisma.IntFilter<"RecurrenceRule"> | number
@@ -283,9 +283,9 @@ export type RecurrenceRuleScalarWhereWithAggregatesInput = {
   AND?: Prisma.RecurrenceRuleScalarWhereWithAggregatesInput | Prisma.RecurrenceRuleScalarWhereWithAggregatesInput[]
   OR?: Prisma.RecurrenceRuleScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RecurrenceRuleScalarWhereWithAggregatesInput | Prisma.RecurrenceRuleScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"RecurrenceRule"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"RecurrenceRule"> | string
-  categoryId?: Prisma.StringWithAggregatesFilter<"RecurrenceRule"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"RecurrenceRule"> | string
+  userId?: Prisma.UuidWithAggregatesFilter<"RecurrenceRule"> | string
+  categoryId?: Prisma.UuidWithAggregatesFilter<"RecurrenceRule"> | string
   name?: Prisma.StringWithAggregatesFilter<"RecurrenceRule"> | string
   amount?: Prisma.FloatWithAggregatesFilter<"RecurrenceRule"> | number
   dayOfMonth?: Prisma.IntWithAggregatesFilter<"RecurrenceRule"> | number
