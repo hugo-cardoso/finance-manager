@@ -8,7 +8,8 @@ type UserResponse = {
 
 export class UserService {
   static async getUser() {
-    const response = await api.get<UserResponse>("users/me");
-    return response.json();
+    const response = await api.get("users/me").json<UserResponse>();
+
+    return response;
   }
 }

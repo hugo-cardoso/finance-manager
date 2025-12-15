@@ -1,34 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-import { AppSidebarContent } from "@/components/app-sidebar-content";
-import { GreetingWidget } from "@/components/greeting-widget";
-import { Card } from "@/components/ui/card";
+import { useUserSuspenseQuery } from "@/hooks/queries/useUserQuery";
+import { PrivateLayoutContent } from "@/layouts/PrivateLayout/content";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
-  component: RouteComponent,
+  component: () => (
+    <PrivateLayoutContent title="Dashboard">
+      <RouteComponent />
+    </PrivateLayoutContent>
+  ),
 });
 
 function RouteComponent() {
+  const user = useUserSuspenseQuery();
+
   return (
-    <AppSidebarContent title="Dashboard">
-      <div className="px-4 py-5 flex flex-col gap-4">
-        <GreetingWidget />
-
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Widget />
-          <Widget />
-        </section>
-
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Widget />
-          <Widget />
-          <Widget />
-        </section>
+    <div>
+      <p>Hello {user.data.name}!</p>
+      <div className="flex flex-1 flex-col gap-4 p-4">
+        {Array.from({ length: 24 }).map((_, index) => (
+          <div key={index} className="bg-muted/50 aspect-video h-12 w-full rounded-lg" />
+        ))}
       </div>
-    </AppSidebarContent>
+    </div>
   );
-}
-
-function Widget() {
-  return <Card className="@container/card bg-input/30 h-[200px]" />;
 }

@@ -1,38 +1,38 @@
-import { decodeJwt } from "jose";
 import ky from "ky";
+import { getRouter } from "@/router";
 
-import { AuthService } from "@/services/AuthService";
+const API_URL = import.meta.env.VITE_API_URL || process.env.VITE_API_URL;
+
+console.log(API_URL);
 
 export const api = ky.create({
-  prefixUrl: new URL("/api", import.meta.env.VITE_API_URL).toString(),
+  prefixUrl: new URL("/api", API_URL).toString(),
   hooks: {
     beforeRequest: [
       async (request, options) => {
         const auth = options.context?.auth ?? true;
 
+        if (auth) {
+          const token = await cookieStore.get("access_token");
+
+          if (token) {
+            request.headers.set("Authorization", `Bearer ${token.value}`);
+          }
+        }
+      },
+    ],
+    afterResponse: [
+      async (_request, options, response) => {
+        const auth = options.context?.auth ?? true;
+
         if (!auth) return;
 
-        const token = window.localStorage.getItem("access_token");
+        if (response.status === 401) {
+          cookieStore.delete("access_token");
 
-        if (!token) {
+          getRouter().navigate({ to: "/auth/sign-in" });
           throw new Error("Unauthorized");
         }
-
-        const decoded = decodeJwt(token);
-
-        if (decoded.exp && decoded.exp < Date.now() / 1000) {
-          const refreshToken = window.localStorage.getItem("refresh_token");
-          const response = await AuthService.refreshToken(refreshToken as string);
-
-          window.localStorage.setItem("access_token", response.access_token);
-          window.localStorage.setItem("refresh_token", response.refresh_token);
-          window.localStorage.setItem("expires_at", response.expires_at.toString());
-
-          request.headers.set("Authorization", `Bearer ${response.access_token}`);
-          return;
-        }
-
-        request.headers.set("Authorization", `Bearer ${token}`);
       },
     ],
   },

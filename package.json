@@ -15,5 +15,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.13.1",
+  "workspaces": [
+    "apps/frontend",
+    "apps/api"
+  ],
+  "engines": {
+    "node": "22"
+  }
 }

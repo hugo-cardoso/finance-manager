@@ -11,15 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthSignUpRouteRouteImport } from './routes/auth/sign-up/route'
-import { Route as AuthSignInRouteRouteImport } from './routes/auth/sign-in/route'
-import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
-import { Route as AuthSignOutIndexRouteImport } from './routes/auth/sign-out/index'
-import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
+import { Route as AuthSignOutRouteImport } from './routes/auth/sign-out'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
-import { Route as AuthSignUpVerifyIndexRouteImport } from './routes/auth/sign-up/verify/index'
-import { Route as AuthenticatedDashboardUserIndexRouteImport } from './routes/_authenticated/dashboard/user/index'
-import { Route as AuthenticatedDashboardTransactionsIndexRouteImport } from './routes/_authenticated/dashboard/transactions/index'
+import { Route as AuthenticatedDashboardTransacoesIndexRouteImport } from './routes/_authenticated/dashboard/transacoes/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -30,30 +25,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthSignUpRouteRoute = AuthSignUpRouteRouteImport.update({
-  id: '/auth/sign-up',
-  path: '/auth/sign-up',
+const AuthSignOutRoute = AuthSignOutRouteImport.update({
+  id: '/auth/sign-out',
+  path: '/auth/sign-out',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthSignInRouteRoute = AuthSignInRouteRouteImport.update({
+const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthSignUpIndexRoute = AuthSignUpIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthSignUpRouteRoute,
-} as any)
-const AuthSignOutIndexRoute = AuthSignOutIndexRouteImport.update({
-  id: '/auth/sign-out/',
-  path: '/auth/sign-out/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthSignInIndexRoute = AuthSignInIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthSignInRouteRoute,
 } as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
@@ -61,104 +41,66 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthSignUpVerifyIndexRoute = AuthSignUpVerifyIndexRouteImport.update({
-  id: '/verify/',
-  path: '/verify/',
-  getParentRoute: () => AuthSignUpRouteRoute,
-} as any)
-const AuthenticatedDashboardUserIndexRoute =
-  AuthenticatedDashboardUserIndexRouteImport.update({
-    id: '/dashboard/user/',
-    path: '/dashboard/user/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedDashboardTransactionsIndexRoute =
-  AuthenticatedDashboardTransactionsIndexRouteImport.update({
-    id: '/dashboard/transactions/',
-    path: '/dashboard/transactions/',
+const AuthenticatedDashboardTransacoesIndexRoute =
+  AuthenticatedDashboardTransacoesIndexRouteImport.update({
+    id: '/dashboard/transacoes/',
+    path: '/dashboard/transacoes/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth/sign-in': typeof AuthSignInRouteRouteWithChildren
-  '/auth/sign-up': typeof AuthSignUpRouteRouteWithChildren
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-out': typeof AuthSignOutRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
-  '/auth/sign-in/': typeof AuthSignInIndexRoute
-  '/auth/sign-out': typeof AuthSignOutIndexRoute
-  '/auth/sign-up/': typeof AuthSignUpIndexRoute
-  '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsIndexRoute
-  '/dashboard/user': typeof AuthenticatedDashboardUserIndexRoute
-  '/auth/sign-up/verify': typeof AuthSignUpVerifyIndexRoute
+  '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-out': typeof AuthSignOutRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
-  '/auth/sign-in': typeof AuthSignInIndexRoute
-  '/auth/sign-out': typeof AuthSignOutIndexRoute
-  '/auth/sign-up': typeof AuthSignUpIndexRoute
-  '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsIndexRoute
-  '/dashboard/user': typeof AuthenticatedDashboardUserIndexRoute
-  '/auth/sign-up/verify': typeof AuthSignUpVerifyIndexRoute
+  '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth/sign-in': typeof AuthSignInRouteRouteWithChildren
-  '/auth/sign-up': typeof AuthSignUpRouteRouteWithChildren
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-out': typeof AuthSignOutRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
-  '/auth/sign-in/': typeof AuthSignInIndexRoute
-  '/auth/sign-out/': typeof AuthSignOutIndexRoute
-  '/auth/sign-up/': typeof AuthSignUpIndexRoute
-  '/_authenticated/dashboard/transactions/': typeof AuthenticatedDashboardTransactionsIndexRoute
-  '/_authenticated/dashboard/user/': typeof AuthenticatedDashboardUserIndexRoute
-  '/auth/sign-up/verify/': typeof AuthSignUpVerifyIndexRoute
+  '/_authenticated/dashboard/transacoes/': typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth/sign-in'
-    | '/auth/sign-up'
-    | '/dashboard'
-    | '/auth/sign-in/'
     | '/auth/sign-out'
-    | '/auth/sign-up/'
-    | '/dashboard/transactions'
-    | '/dashboard/user'
-    | '/auth/sign-up/verify'
+    | '/dashboard'
+    | '/dashboard/transacoes'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-out'
-    | '/auth/sign-up'
-    | '/dashboard/transactions'
-    | '/dashboard/user'
-    | '/auth/sign-up/verify'
+    | '/dashboard'
+    | '/dashboard/transacoes'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth/sign-in'
-    | '/auth/sign-up'
+    | '/auth/sign-out'
     | '/_authenticated/dashboard/'
-    | '/auth/sign-in/'
-    | '/auth/sign-out/'
-    | '/auth/sign-up/'
-    | '/_authenticated/dashboard/transactions/'
-    | '/_authenticated/dashboard/user/'
-    | '/auth/sign-up/verify/'
+    | '/_authenticated/dashboard/transacoes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthSignInRouteRoute: typeof AuthSignInRouteRouteWithChildren
-  AuthSignUpRouteRoute: typeof AuthSignUpRouteRouteWithChildren
-  AuthSignOutIndexRoute: typeof AuthSignOutIndexRoute
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignOutRoute: typeof AuthSignOutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -177,40 +119,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/sign-up': {
-      id: '/auth/sign-up'
-      path: '/auth/sign-up'
-      fullPath: '/auth/sign-up'
-      preLoaderRoute: typeof AuthSignUpRouteRouteImport
+    '/auth/sign-out': {
+      id: '/auth/sign-out'
+      path: '/auth/sign-out'
+      fullPath: '/auth/sign-out'
+      preLoaderRoute: typeof AuthSignOutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/sign-in': {
       id: '/auth/sign-in'
       path: '/auth/sign-in'
       fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof AuthSignInRouteRouteImport
+      preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/auth/sign-up/': {
-      id: '/auth/sign-up/'
-      path: '/'
-      fullPath: '/auth/sign-up/'
-      preLoaderRoute: typeof AuthSignUpIndexRouteImport
-      parentRoute: typeof AuthSignUpRouteRoute
-    }
-    '/auth/sign-out/': {
-      id: '/auth/sign-out/'
-      path: '/auth/sign-out'
-      fullPath: '/auth/sign-out'
-      preLoaderRoute: typeof AuthSignOutIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/sign-in/': {
-      id: '/auth/sign-in/'
-      path: '/'
-      fullPath: '/auth/sign-in/'
-      preLoaderRoute: typeof AuthSignInIndexRouteImport
-      parentRoute: typeof AuthSignInRouteRoute
     }
     '/_authenticated/dashboard/': {
       id: '/_authenticated/dashboard/'
@@ -219,25 +140,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/auth/sign-up/verify/': {
-      id: '/auth/sign-up/verify/'
-      path: '/verify'
-      fullPath: '/auth/sign-up/verify'
-      preLoaderRoute: typeof AuthSignUpVerifyIndexRouteImport
-      parentRoute: typeof AuthSignUpRouteRoute
-    }
-    '/_authenticated/dashboard/user/': {
-      id: '/_authenticated/dashboard/user/'
-      path: '/dashboard/user'
-      fullPath: '/dashboard/user'
-      preLoaderRoute: typeof AuthenticatedDashboardUserIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/dashboard/transactions/': {
-      id: '/_authenticated/dashboard/transactions/'
-      path: '/dashboard/transactions'
-      fullPath: '/dashboard/transactions'
-      preLoaderRoute: typeof AuthenticatedDashboardTransactionsIndexRouteImport
+    '/_authenticated/dashboard/transacoes/': {
+      id: '/_authenticated/dashboard/transacoes/'
+      path: '/dashboard/transacoes'
+      fullPath: '/dashboard/transacoes'
+      preLoaderRoute: typeof AuthenticatedDashboardTransacoesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
@@ -245,53 +152,33 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
-  AuthenticatedDashboardTransactionsIndexRoute: typeof AuthenticatedDashboardTransactionsIndexRoute
-  AuthenticatedDashboardUserIndexRoute: typeof AuthenticatedDashboardUserIndexRoute
+  AuthenticatedDashboardTransacoesIndexRoute: typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
-  AuthenticatedDashboardTransactionsIndexRoute:
-    AuthenticatedDashboardTransactionsIndexRoute,
-  AuthenticatedDashboardUserIndexRoute: AuthenticatedDashboardUserIndexRoute,
+  AuthenticatedDashboardTransacoesIndexRoute:
+    AuthenticatedDashboardTransacoesIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface AuthSignInRouteRouteChildren {
-  AuthSignInIndexRoute: typeof AuthSignInIndexRoute
-}
-
-const AuthSignInRouteRouteChildren: AuthSignInRouteRouteChildren = {
-  AuthSignInIndexRoute: AuthSignInIndexRoute,
-}
-
-const AuthSignInRouteRouteWithChildren = AuthSignInRouteRoute._addFileChildren(
-  AuthSignInRouteRouteChildren,
-)
-
-interface AuthSignUpRouteRouteChildren {
-  AuthSignUpIndexRoute: typeof AuthSignUpIndexRoute
-  AuthSignUpVerifyIndexRoute: typeof AuthSignUpVerifyIndexRoute
-}
-
-const AuthSignUpRouteRouteChildren: AuthSignUpRouteRouteChildren = {
-  AuthSignUpIndexRoute: AuthSignUpIndexRoute,
-  AuthSignUpVerifyIndexRoute: AuthSignUpVerifyIndexRoute,
-}
-
-const AuthSignUpRouteRouteWithChildren = AuthSignUpRouteRoute._addFileChildren(
-  AuthSignUpRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthSignInRouteRoute: AuthSignInRouteRouteWithChildren,
-  AuthSignUpRouteRoute: AuthSignUpRouteRouteWithChildren,
-  AuthSignOutIndexRoute: AuthSignOutIndexRoute,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignOutRoute: AuthSignOutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

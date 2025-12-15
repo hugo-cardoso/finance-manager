@@ -1,25 +1,32 @@
-import { defineConfig } from 'vite'
-import { devtools } from '@tanstack/devtools-vite'
-import viteReact from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import tailwindcss from "@tailwindcss/vite";
+import { devtools } from "@tanstack/devtools-vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
+import { defineConfig } from "vite";
+import viteTsConfigPaths from "vite-tsconfig-paths";
 
-import { tanstackRouter } from '@tanstack/router-plugin/vite'
-import { fileURLToPath, URL } from 'node:url'
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// https://vitejs.dev/config/
-export default defineConfig({
+const config = defineConfig({
   plugins: [
     devtools(),
-    tanstackRouter({
-      target: 'react',
-      autoCodeSplitting: true,
+    nitro(),
+    // this is the plugin that enables path aliases
+    viteTsConfigPaths({
+      projects: ["./tsconfig.json"],
     }),
-    viteReact(),
     tailwindcss(),
+    tanstackStart(),
+    viteReact(),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      "@tabler/icons-react": path.resolve(__dirname, "node_modules/@tabler/icons-react/dist/esm/icons/index.mjs"),
     },
   },
-})
+});
+
+export default config;
