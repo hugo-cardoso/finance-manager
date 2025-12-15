@@ -7,7 +7,7 @@
     },
     "frontend#build": {
       "dependsOn": ["type-check", "lint"],
-      "outputs": ["dist/**"],
+      "outputs": [".output/**"],
       "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "api#build": {

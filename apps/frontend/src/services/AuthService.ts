@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { getApi } from "@/lib/api";
 
 type SignInResponse = {
   access_token: string;
@@ -7,7 +7,7 @@ type SignInResponse = {
 
 export class AuthService {
   static async signIn(email: string, password: string) {
-    const data = await api
+    const data = await getApi()
       .post("auth/sign-in", {
         json: {
           email,

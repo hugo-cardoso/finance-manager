@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { getApi } from "@/lib/api";
 
 type UserResponse = {
   id: string;
@@ -8,7 +8,7 @@ type UserResponse = {
 
 export class UserService {
   static async getUser() {
-    const response = await api.get("users/me").json<UserResponse>();
+    const response = await getApi().get("users/me").json<UserResponse>();
 
     return response;
   }

@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { getApi } from "@/lib/api";
 
 export type Transaction = {
   id: string;
@@ -29,7 +29,7 @@ type CreateTransactionDto = {
 
 export class TransactionsService {
   static async getTransactions(month: number, year: number) {
-    const response = await api
+    const response = await getApi()
       .get("transactions", {
         searchParams: {
           month,
@@ -42,13 +42,13 @@ export class TransactionsService {
   }
 
   static async getCategories() {
-    const response = await api.get("categories").json<TransactionCategoriesResponse>();
+    const response = await getApi().get("categories").json<TransactionCategoriesResponse>();
 
     return response;
   }
 
   static async createTransaction(createTransactionDto: CreateTransactionDto) {
-    const response = await api
+    const response = await getApi()
       .post("transactions", {
         json: {
           name: createTransactionDto.name,
@@ -65,6 +65,6 @@ export class TransactionsService {
   }
 
   static async deleteTransaction(id: string) {
-    await api.delete(`transactions/${id}`);
+    await getApi().delete(`transactions/${id}`);
   }
 }
