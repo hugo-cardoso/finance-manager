@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignOutRouteImport } from './routes/auth/sign-out'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
@@ -24,6 +25,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/auth/sign-up',
+  path: '/auth/sign-up',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignOutRoute = AuthSignOutRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/perfil': typeof AuthenticatedDashboardPerfilIndexRoute
   '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/perfil': typeof AuthenticatedDashboardPerfilIndexRoute
   '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/perfil/': typeof AuthenticatedDashboardPerfilIndexRoute
   '/_authenticated/dashboard/transacoes/': typeof AuthenticatedDashboardTransacoesIndexRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/sign-in'
     | '/auth/sign-out'
+    | '/auth/sign-up'
     | '/dashboard'
     | '/dashboard/perfil'
     | '/dashboard/transacoes'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/sign-in'
     | '/auth/sign-out'
+    | '/auth/sign-up'
     | '/dashboard'
     | '/dashboard/perfil'
     | '/dashboard/transacoes'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth/sign-in'
     | '/auth/sign-out'
+    | '/auth/sign-up'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/perfil/'
     | '/_authenticated/dashboard/transacoes/'
@@ -114,6 +126,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignOutRoute: typeof AuthSignOutRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,6 +143,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/auth/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/sign-out': {
@@ -192,6 +212,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignOutRoute: AuthSignOutRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,40 +1,30 @@
-import { Badge, Button, Card, Group, Image, Text } from "@mantine/core";
+import { Button, Center, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({ component: App, ssr: true });
+export const Route = createFileRoute("/")({ component: RouteComponent, ssr: true });
 
-function App() {
+function RouteComponent() {
   return (
-    <div className="container mx-auto flex flex-col gap-2">
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <Card.Section>
-          <Image
-            src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
-            height={160}
-            alt="Norway"
-          />
-        </Card.Section>
+    <Center style={{ minHeight: "100vh" }} bg="dark.8">
+      <Paper shadow="md" p="xl" radius="md" withBorder style={{ width: "100%", maxWidth: "520px" }}>
+        <Stack gap="lg">
+          <Stack gap="xs">
+            <Title order={2} ta="center">
+              Finance Manager
+            </Title>
+            <Text c="dimmed" ta="center">
+              Controle suas finanças com simplicidade.
+            </Text>
+          </Stack>
 
-        <Group justify="space-between" mt="md" mb="xs">
-          <Text fw={500}>Norway Fjord Adventures</Text>
-          <Badge color="pink">On Sale</Badge>
-        </Group>
-
-        <Text size="sm" c="dimmed">
-          With Fjord Tours you can explore more of the magical fjord landscapes with tours and activities on and around
-          the fjords of Norway
-        </Text>
-
-        <Button
-          color="blue"
-          fullWidth
-          mt="md"
-          radius="md"
-          renderRoot={(props) => <Route.Link to="/auth/sign-in" {...props} />}
-        >
-          Sign in
-        </Button>
-      </Card>
-    </div>
+          <Group grow>
+            <Button renderRoot={(props) => <Route.Link to="/auth/sign-in" {...props} />}>Entrar</Button>
+            <Button variant="light" renderRoot={(props) => <Route.Link to="/auth/sign-up" {...props} />}>
+              Criar conta
+            </Button>
+          </Group>
+        </Stack>
+      </Paper>
+    </Center>
   );
 }
