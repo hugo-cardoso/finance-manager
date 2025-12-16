@@ -3,6 +3,8 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { MantineProvider } from "@/providers/mantine";
+
 import appCss from "../styles.css?url";
 
 export const Route = createRootRouteWithContext<{
@@ -34,12 +36,12 @@ export const Route = createRootRouteWithContext<{
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className="dark">
+    <html lang="pt-BR" className="dark" data-mantine-color-scheme="dark">
       <head>
         <HeadContent />
       </head>
       <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
-        {children}
+        <MantineProvider>{children}</MantineProvider>
         <TanStackDevtools
           config={{
             position: "bottom-right",

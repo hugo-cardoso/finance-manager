@@ -1,5 +1,5 @@
+import { Center, Loader } from "@mantine/core";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { Spinner } from "@/components/ui/spinner";
 import { useUserQueryOptions } from "@/hooks/queries/useUserQuery";
 import { PrivateLayout } from "@/layouts/PrivateLayout";
 
@@ -22,8 +22,8 @@ export const Route = createFileRoute("/_authenticated")({
     </PrivateLayout>
   ),
   pendingComponent: () => (
-    <div className="flex h-dvh w-full items-center justify-center">
-      <Spinner />
-    </div>
+    <Center style={{ minHeight: "100vh" }} bg="dark.9">
+      <Loader size="sm" />
+    </Center>
   ),
 });
