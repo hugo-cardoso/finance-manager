@@ -31,9 +31,10 @@ export function NavMenu() {
         {NAV_MENU_ITEMS.map((item) => (
           <SidebarMenuItem key={item.label}>
             <SidebarMenuButton
+              className="max-sm:text-lg max-sm:h-10!"
               render={({ className, ...props }) => (
                 <Link className={cn(className)} {...props} {...item.link} onClick={() => setOpenMobile(false)}>
-                  <item.icon />
+                  <item.icon className="max-sm:text-xl! max-sm:size-5!" />
                   <span>{item.label}</span>
                 </Link>
               )}

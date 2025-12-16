@@ -1,7 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "globalDependencies": [".env"],
-  "globalPassThroughEnv": ["TURBO_API_URL", "TURBO_TOKEN"],
+  "globalPassThroughEnv": ["TURBO_API_URL", "TURBO_TOKEN", "TURBO_TEAM"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"]
@@ -10,13 +10,13 @@
       "dependsOn": ["type-check", "lint"],
       "outputs": [".output/**"],
       "inputs": ["$TURBO_DEFAULT$", ".env"],
-      "env": ["TURBO_API_URL", "TURBO_TOKEN"]
+      "env": ["TURBO_API_URL", "TURBO_TOKEN", "TURBO_TEAM"]
     },
     "api#build": {
       "dependsOn": ["type-check", "lint"],
       "outputs": ["dist/**"],
       "inputs": ["$TURBO_DEFAULT$", ".env"],
-      "env": ["TURBO_API_URL", "TURBO_TOKEN"]
+      "env": ["TURBO_API_URL", "TURBO_TOKEN", "TURBO_TEAM"]
     },
     "lint": {},
     "type-check": {},
