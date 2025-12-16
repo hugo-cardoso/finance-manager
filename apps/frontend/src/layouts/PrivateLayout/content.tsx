@@ -1,4 +1,5 @@
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppShell, Burger, Group } from "@mantine/core";
+import { usePrivateLayout } from "./hooks/usePrivateLayout";
 
 type PrivateLayoutContentProps = {
   title: string;
@@ -6,15 +7,19 @@ type PrivateLayoutContentProps = {
 };
 
 export function PrivateLayoutContent(props: PrivateLayoutContentProps) {
+  const { opened, toggle } = usePrivateLayout();
+
   return (
-    <SidebarInset>
-      <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b pr-4">
-        <div className="h-16 aspect-square flex items-center justify-center border-r border-border">
-          <SidebarTrigger size="icon-lg" />
-        </div>
-        <h1 className="text-sm font-bold pl-4">{props.title}</h1>
-      </header>
-      <main className="flex flex-1 flex-col gap-4 p-4">{props.children}</main>
-    </SidebarInset>
+    <>
+      <AppShell.Header>
+        <Group h="100%" px="md">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          {props.title}
+        </Group>
+      </AppShell.Header>
+      <AppShell.Main bg="dark.9" className="flex flex-col">
+        {props.children}
+      </AppShell.Main>
+    </>
   );
 }

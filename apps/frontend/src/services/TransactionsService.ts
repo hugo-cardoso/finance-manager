@@ -4,7 +4,12 @@ export type Transaction = {
   id: string;
   name: string;
   amount: number;
+  date: string; // ISO 8601
   category: TransactionCategory;
+  installment?: {
+    number: number;
+    total: number;
+  };
 };
 
 type TransactionCategory = {

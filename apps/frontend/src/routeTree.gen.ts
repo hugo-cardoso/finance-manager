@@ -15,6 +15,7 @@ import { Route as AuthSignOutRouteImport } from './routes/auth/sign-out'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as AuthenticatedDashboardTransacoesIndexRouteImport } from './routes/_authenticated/dashboard/transacoes/index'
+import { Route as AuthenticatedDashboardPerfilIndexRouteImport } from './routes/_authenticated/dashboard/perfil/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -47,12 +48,19 @@ const AuthenticatedDashboardTransacoesIndexRoute =
     path: '/dashboard/transacoes/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardPerfilIndexRoute =
+  AuthenticatedDashboardPerfilIndexRouteImport.update({
+    id: '/dashboard/perfil/',
+    path: '/dashboard/perfil/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/perfil': typeof AuthenticatedDashboardPerfilIndexRoute
   '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -60,6 +68,7 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/perfil': typeof AuthenticatedDashboardPerfilIndexRoute
   '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 export interface FileRoutesById {
@@ -69,6 +78,7 @@ export interface FileRoutesById {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/perfil/': typeof AuthenticatedDashboardPerfilIndexRoute
   '/_authenticated/dashboard/transacoes/': typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 export interface FileRouteTypes {
@@ -78,6 +88,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-out'
     | '/dashboard'
+    | '/dashboard/perfil'
     | '/dashboard/transacoes'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -85,6 +96,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-out'
     | '/dashboard'
+    | '/dashboard/perfil'
     | '/dashboard/transacoes'
   id:
     | '__root__'
@@ -93,6 +105,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-out'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/perfil/'
     | '/_authenticated/dashboard/transacoes/'
   fileRoutesById: FileRoutesById
 }
@@ -147,16 +160,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardTransacoesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/perfil/': {
+      id: '/_authenticated/dashboard/perfil/'
+      path: '/dashboard/perfil'
+      fullPath: '/dashboard/perfil'
+      preLoaderRoute: typeof AuthenticatedDashboardPerfilIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardPerfilIndexRoute: typeof AuthenticatedDashboardPerfilIndexRoute
   AuthenticatedDashboardTransacoesIndexRoute: typeof AuthenticatedDashboardTransacoesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  AuthenticatedDashboardPerfilIndexRoute:
+    AuthenticatedDashboardPerfilIndexRoute,
   AuthenticatedDashboardTransacoesIndexRoute:
     AuthenticatedDashboardTransacoesIndexRoute,
 }
