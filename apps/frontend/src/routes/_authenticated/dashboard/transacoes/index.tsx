@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useTransactionsQuery, useTransactionsQueryOptions } from "@/hooks/queries/useTransactionsQuery";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { PrivateLayoutContent } from "@/layouts/PrivateLayout/content";
+import { CreateTransactionDrawer } from "./-components/CreateTransactionDrawer";
 import { MonthReport } from "./-components/MonthReport";
 import { MonthSelector } from "./-components/MonthSelector";
 import { TransactionItem } from "./-components/TransactionItem";
@@ -68,15 +69,17 @@ function RouteComponent() {
             }}
           />
 
-          {isMobile ? (
-            <Button variant="filled" radius="md">
-              <IconPlus size={14} />
-            </Button>
-          ) : (
-            <Button leftSection={<IconPlus size={14} />} variant="filled" radius="md">
-              Nova transação
-            </Button>
-          )}
+          <CreateTransactionDrawer>
+            {isMobile ? (
+              <Button variant="filled" radius="md">
+                <IconPlus size={14} />
+              </Button>
+            ) : (
+              <Button leftSection={<IconPlus size={14} />} variant="filled" radius="md">
+                Nova transação
+              </Button>
+            )}
+          </CreateTransactionDrawer>
         </Flex>
         <Divider my="md" />
       </Stack>
