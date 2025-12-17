@@ -1,15 +1,5 @@
-import {
-  Avatar,
-  Card,
-  Group,
-  Stack,
-  Text,
-  Title,
-  Badge,
-  Box,
-  Divider,
-} from "@mantine/core";
-import { IconUser, IconMail, IconId } from "@tabler/icons-react";
+import { Avatar, Badge, Box, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
+import { IconId, IconMail, IconUser } from "@tabler/icons-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useUserSuspenseQuery } from "@/hooks/queries/useUserQuery";
 import { PrivateLayoutContent } from "@/layouts/PrivateLayout/content";
@@ -41,12 +31,7 @@ function RouteComponent() {
         <Stack gap="xl">
           {/* Header com avatar e nome */}
           <Group>
-            <Avatar
-              size={80}
-              radius="md"
-              color="blue"
-              variant="filled"
-            >
+            <Avatar size={80} radius="md" color="blue" variant="filled">
               {getInitials(user.data.name)}
             </Avatar>
             <Stack gap="xs">
