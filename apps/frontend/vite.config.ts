@@ -10,11 +10,11 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const config = defineConfig(() => {
+const config = defineConfig(({ mode }) => {
   return {
     plugins: [
       devtools(),
-      nitro(),
+      mode !== "development" ? nitro() : undefined,
       // this is the plugin that enables path aliases
       viteTsConfigPaths({
         projects: ["./tsconfig.json"],
