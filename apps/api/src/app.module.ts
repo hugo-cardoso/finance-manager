@@ -2,6 +2,8 @@ import KeyvRedis from "@keyv/redis";
 import { CacheModule } from "@nestjs/cache-manager";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { APP_FILTER } from "@nestjs/core";
+import { SentryGlobalFilter, SentryModule } from "@sentry/nestjs/setup";
 import { CacheableMemory } from "cacheable";
 import { Keyv } from "keyv";
 import { AuthModule } from "./modules/auth/auth.module";
@@ -14,6 +16,7 @@ import { UsersModule } from "./modules/users/users.module";
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    SentryModule.forRoot(),
     CacheModule.registerAsync({
       useFactory: async () => {
         if (process.env.NODE_ENV === "production") {
@@ -38,6 +41,11 @@ import { UsersModule } from "./modules/users/users.module";
     TransactionsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: SentryGlobalFilter,
+    },
+  ],
 })
 export class AppModule {}
