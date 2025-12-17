@@ -56,18 +56,20 @@ function RouteComponent() {
     <div className="flex h-full flex-col flex-1">
       <Stack gap={0}>
         <Flex justify="space-between" align="center" gap="md">
-          <MonthSelector
-            month={mes}
-            year={ano}
-            onChange={(month, year) => {
-              navigate({
-                search: {
-                  mes: month,
-                  ano: year,
-                },
-              });
-            }}
-          />
+          <div className="w-full flex-1">
+            <MonthSelector
+              month={mes}
+              year={ano}
+              onChange={(month, year) => {
+                navigate({
+                  search: {
+                    mes: month,
+                    ano: year,
+                  },
+                });
+              }}
+            />
+          </div>
 
           <CreateTransactionDrawer>
             {isMobile ? (

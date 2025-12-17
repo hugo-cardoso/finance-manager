@@ -1,9 +1,9 @@
-import { ActionIcon, Badge, Group, Paper, Stack, Text } from "@mantine/core";
+import { ActionIcon, Badge, Flex, Group, Paper, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconChevronsDown, IconChevronsUp, IconTrash } from "@tabler/icons-react";
+import { IconArrowDownRight, IconArrowUpRight, IconEye, IconTrash } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-
 import { type Transaction, TransactionsService } from "@/services/TransactionsService";
 
 type TransactionItemProps = {
@@ -49,8 +49,9 @@ export function TransactionItem(props: TransactionItemProps) {
     <Paper shadow="xs" p="md" withBorder>
       <Group justify="space-between" align="center" wrap="nowrap">
         <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
-          {type === "income" && <IconChevronsUp size={24} color="var(--mantine-color-green-6)" />}
-          {type === "expense" && <IconChevronsDown size={24} color="var(--mantine-color-red-6)" />}
+          <ThemeIcon color={type === "income" ? "teal" : "red"} variant="light" size="lg" radius="md">
+            {type === "income" ? <IconArrowUpRight size={20} /> : <IconArrowDownRight size={20} />}
+          </ThemeIcon>
 
           <Stack gap={6} style={{ flex: 1 }}>
             <Group gap="xs" align="center">
@@ -82,16 +83,38 @@ export function TransactionItem(props: TransactionItemProps) {
           </Stack>
         </Group>
 
-        <ActionIcon
-          variant="subtle"
-          color="red"
-          size="lg"
-          aria-label="Delete transaction"
-          onClick={() => deleteTransactionMutation.mutate(props.transaction.id)}
-          loading={deleteTransactionMutation.isPending}
-        >
-          <IconTrash size={18} />
-        </ActionIcon>
+        <Flex gap="xs" align="center">
+          <Tooltip label="Visualizar transação" withArrow>
+            <ActionIcon
+              variant="light"
+              color="gray"
+              size="lg"
+              aria-label="View transaction"
+              renderRoot={(buttonProps) => (
+                <Link {...buttonProps} to="/dashboard/transacoes/$id" params={{ id: props.transaction.id }} />
+              )}
+            >
+              <ThemeIcon color="gray" variant="transparent">
+                <IconEye size={18} />
+              </ThemeIcon>
+            </ActionIcon>
+          </Tooltip>
+
+          <Tooltip label="Deletar transação" withArrow>
+            <ActionIcon
+              variant="light"
+              color="red"
+              size="lg"
+              aria-label="Delete transaction"
+              onClick={() => deleteTransactionMutation.mutate(props.transaction.id)}
+              loading={deleteTransactionMutation.isPending}
+            >
+              <ThemeIcon color="red" variant="transparent">
+                <IconTrash size={18} />
+              </ThemeIcon>
+            </ActionIcon>
+          </Tooltip>
+        </Flex>
       </Group>
     </Paper>
   );

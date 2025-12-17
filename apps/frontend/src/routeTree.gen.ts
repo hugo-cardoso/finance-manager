@@ -14,9 +14,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignOutRouteImport } from './routes/auth/sign-out'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as AuthenticatedDashboardRouteRouteImport } from './routes/_authenticated/dashboard/route'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as AuthenticatedDashboardTransacoesIndexRouteImport } from './routes/_authenticated/dashboard/transacoes/index'
 import { Route as AuthenticatedDashboardPerfilIndexRouteImport } from './routes/_authenticated/dashboard/perfil/index'
+import { Route as AuthenticatedDashboardTransacoesIdIndexRouteImport } from './routes/_authenticated/dashboard/transacoes/$id/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -42,33 +44,47 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRouteRoute =
+  AuthenticatedDashboardRouteRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
-    id: '/dashboard/',
-    path: '/dashboard/',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 const AuthenticatedDashboardTransacoesIndexRoute =
   AuthenticatedDashboardTransacoesIndexRouteImport.update({
-    id: '/dashboard/transacoes/',
-    path: '/dashboard/transacoes/',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/transacoes/',
+    path: '/transacoes/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 const AuthenticatedDashboardPerfilIndexRoute =
   AuthenticatedDashboardPerfilIndexRouteImport.update({
-    id: '/dashboard/perfil/',
-    path: '/dashboard/perfil/',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/perfil/',
+    path: '/perfil/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
+  } as any)
+const AuthenticatedDashboardTransacoesIdIndexRoute =
+  AuthenticatedDashboardTransacoesIdIndexRouteImport.update({
+    id: '/transacoes/$id/',
+    path: '/transacoes/$id/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/perfil': typeof AuthenticatedDashboardPerfilIndexRoute
   '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
+  '/dashboard/transacoes/$id': typeof AuthenticatedDashboardTransacoesIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,28 +94,33 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/perfil': typeof AuthenticatedDashboardPerfilIndexRoute
   '/dashboard/transacoes': typeof AuthenticatedDashboardTransacoesIndexRoute
+  '/dashboard/transacoes/$id': typeof AuthenticatedDashboardTransacoesIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-out': typeof AuthSignOutRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/perfil/': typeof AuthenticatedDashboardPerfilIndexRoute
   '/_authenticated/dashboard/transacoes/': typeof AuthenticatedDashboardTransacoesIndexRoute
+  '/_authenticated/dashboard/transacoes/$id/': typeof AuthenticatedDashboardTransacoesIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-out'
     | '/auth/sign-up'
-    | '/dashboard'
+    | '/dashboard/'
     | '/dashboard/perfil'
     | '/dashboard/transacoes'
+    | '/dashboard/transacoes/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,16 +130,19 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/perfil'
     | '/dashboard/transacoes'
+    | '/dashboard/transacoes/$id'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/_authenticated/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-out'
     | '/auth/sign-up'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/perfil/'
     | '/_authenticated/dashboard/transacoes/'
+    | '/_authenticated/dashboard/transacoes/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -166,42 +190,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/dashboard/': {
-      id: '/_authenticated/dashboard/'
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedDashboardRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
     '/_authenticated/dashboard/transacoes/': {
       id: '/_authenticated/dashboard/transacoes/'
-      path: '/dashboard/transacoes'
+      path: '/transacoes'
       fullPath: '/dashboard/transacoes'
       preLoaderRoute: typeof AuthenticatedDashboardTransacoesIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
     '/_authenticated/dashboard/perfil/': {
       id: '/_authenticated/dashboard/perfil/'
-      path: '/dashboard/perfil'
+      path: '/perfil'
       fullPath: '/dashboard/perfil'
       preLoaderRoute: typeof AuthenticatedDashboardPerfilIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
+    }
+    '/_authenticated/dashboard/transacoes/$id/': {
+      id: '/_authenticated/dashboard/transacoes/$id/'
+      path: '/transacoes/$id'
+      fullPath: '/dashboard/transacoes/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardTransacoesIdIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
   }
 }
 
-interface AuthenticatedRouteRouteChildren {
+interface AuthenticatedDashboardRouteRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardPerfilIndexRoute: typeof AuthenticatedDashboardPerfilIndexRoute
   AuthenticatedDashboardTransacoesIndexRoute: typeof AuthenticatedDashboardTransacoesIndexRoute
+  AuthenticatedDashboardTransacoesIdIndexRoute: typeof AuthenticatedDashboardTransacoesIdIndexRoute
+}
+
+const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRouteChildren =
+  {
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardPerfilIndexRoute:
+      AuthenticatedDashboardPerfilIndexRoute,
+    AuthenticatedDashboardTransacoesIndexRoute:
+      AuthenticatedDashboardTransacoesIndexRoute,
+    AuthenticatedDashboardTransacoesIdIndexRoute:
+      AuthenticatedDashboardTransacoesIdIndexRoute,
+  }
+
+const AuthenticatedDashboardRouteRouteWithChildren =
+  AuthenticatedDashboardRouteRoute._addFileChildren(
+    AuthenticatedDashboardRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRouteRoute: typeof AuthenticatedDashboardRouteRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
-  AuthenticatedDashboardPerfilIndexRoute:
-    AuthenticatedDashboardPerfilIndexRoute,
-  AuthenticatedDashboardTransacoesIndexRoute:
-    AuthenticatedDashboardTransacoesIndexRoute,
+  AuthenticatedDashboardRouteRoute:
+    AuthenticatedDashboardRouteRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =

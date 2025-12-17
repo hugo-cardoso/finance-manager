@@ -98,7 +98,7 @@ function RouteComponent() {
         </form>
       </Modal>
 
-      <Box p="md">
+      <Box>
         <Card shadow="sm" padding="xl" radius="md" withBorder>
           <Stack gap="xl">
             <Group>

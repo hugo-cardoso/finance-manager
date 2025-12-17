@@ -1,7 +1,7 @@
 import { Button } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { addMonths, subMonths } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type MonthSelectorProps = {
   month: number;
@@ -25,15 +25,22 @@ export function MonthSelector(props: MonthSelectorProps) {
     props.onChange(date.getMonth() + 1, date.getFullYear());
   }, [date]);
 
-  const formattedMonth = String(month).padStart(2, "0");
+  const monthLabel = useMemo(() => {
+    const dateFormatted = new Intl.DateTimeFormat("pt-BR", {
+      month: "long",
+      year: "numeric",
+    }).format(date);
+
+    return dateFormatted.charAt(0).toUpperCase() + dateFormatted.slice(1);
+  }, [date]);
 
   return (
-    <Button.Group>
+    <Button.Group display={{ xs: "flex", md: "block" }} flex={{ xs: 1 }}>
       <Button variant="default" radius="md" onClick={handlePreviousMonth}>
         <IconChevronLeft />
       </Button>
-      <Button.GroupSection variant="default" bg="var(--mantine-color-body)" miw={80}>
-        {formattedMonth}/{year}
+      <Button.GroupSection className="flex-1" variant="default" bg="var(--mantine-color-body)" miw={80}>
+        {monthLabel}
       </Button.GroupSection>
       <Button variant="default" radius="md" onClick={handleNextMonth}>
         <IconChevronRight />

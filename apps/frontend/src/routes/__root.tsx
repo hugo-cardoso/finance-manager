@@ -17,7 +17,7 @@ export const Route = createRootRouteWithContext<{
       },
       {
         name: "viewport",
-        content: "width=device-width, initial-scale=1",
+        content: "width=device-width, initial-scale=1, user-scalable=no",
       },
       {
         title: "TanStack Start Starter",
@@ -40,7 +40,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
+      <body className="bg-(--mantine-color-dark-9)">
         <MantineProvider>{children}</MantineProvider>
         <TanStackDevtools
           config={{

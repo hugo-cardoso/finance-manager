@@ -46,6 +46,12 @@ export class TransactionsService {
     return response;
   }
 
+  static async getTransaction(id: string) {
+    const response = await getApi().get(`transactions/${id}`).json<Transaction>();
+
+    return response;
+  }
+
   static async getCategories() {
     const response = await getApi().get("categories").json<TransactionCategoriesResponse>();
 
