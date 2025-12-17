@@ -39,6 +39,13 @@ function RouteComponent() {
         path: "/",
       });
 
+      cookieStore.set({
+        name: "refresh_token",
+        value: auth.refresh_token,
+        sameSite: "strict",
+        path: "/",
+      });
+
       navigate({ to: "/dashboard" });
     } catch {
       form.setErrors({
