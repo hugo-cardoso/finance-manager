@@ -69,6 +69,8 @@ export class TransactionsService {
   }
 
   async findAllByUserId(userId: string, month: number, year: number) {
+    console.log(`[TRANSACTIONS] - Cache MISS`);
+
     const transactions = await this.prisma.transaction.findMany({
       where: {
         userId,

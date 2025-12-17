@@ -1,3 +1,4 @@
+import { CacheKey, CacheTTL } from "@nestjs/cache-manager";
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "@src/modules/auth/guards/jwt-auth.guard";
 import { CategoriesService } from "./categories.service";
@@ -8,6 +9,8 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get()
+  @CacheKey("categories")
+  @CacheTTL(60000)
   async findAll() {
     const categories = await this.categoriesService.findAll();
 

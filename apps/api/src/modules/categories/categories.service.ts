@@ -11,6 +11,7 @@ export class CategoriesService {
   ) {}
 
   async findAll() {
+    console.log(`[CATEGORIES] - Cache MISS`);
     const categories = await this.prisma.category.findMany();
 
     return categories.map(this.categoryMapper.toEntity);
