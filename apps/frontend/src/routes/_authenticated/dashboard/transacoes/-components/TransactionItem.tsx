@@ -46,7 +46,13 @@ export function TransactionItem(props: TransactionItemProps) {
   }, [props.transaction.date]);
 
   return (
-    <Paper shadow="xs" p="md" withBorder>
+    <Paper
+      style={{
+        boxShadow: "none",
+      }}
+      p="md"
+      withBorder
+    >
       <Group justify="space-between" align="center" wrap="nowrap">
         <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
           <ThemeIcon color={type === "income" ? "teal" : "red"} variant="light" size="lg" radius="md">

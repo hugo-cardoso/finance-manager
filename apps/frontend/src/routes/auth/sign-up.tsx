@@ -1,4 +1,4 @@
-import { Button, Center, Paper, Stack, Text, Title } from "@mantine/core";
+import { Button, Center, Paper, Stack, Text, Title, useComputedColorScheme } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/sign-up")({
@@ -6,8 +6,10 @@ export const Route = createFileRoute("/auth/sign-up")({
 });
 
 function RouteComponent() {
+  const colorScheme = useComputedColorScheme("dark", { getInitialValueInEffect: true });
+
   return (
-    <Center style={{ minHeight: "100vh" }} bg="dark.8">
+    <Center style={{ minHeight: "100vh" }} bg={colorScheme === "dark" ? "dark.8" : "gray.2"}>
       <Paper shadow="md" p="xl" radius="md" withBorder style={{ width: "100%", maxWidth: "420px" }}>
         <Stack gap="lg">
           <Stack gap="xs">

@@ -43,7 +43,7 @@ export class TransactionsService {
       })
       .json<TransactionsResponse>();
 
-    return response;
+    return response.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
   static async getTransaction(id: string) {

@@ -1,4 +1,4 @@
-import { AppShell, Burger, Group } from "@mantine/core";
+import { AppShell, Burger, Group, useComputedColorScheme } from "@mantine/core";
 import { usePrivateLayout } from "./hooks/usePrivateLayout";
 
 type PrivateLayoutContentProps = {
@@ -8,6 +8,7 @@ type PrivateLayoutContentProps = {
 
 export function PrivateLayoutContent(props: PrivateLayoutContentProps) {
   const { opened, toggle } = usePrivateLayout();
+  const colorScheme = useComputedColorScheme("dark", { getInitialValueInEffect: true });
 
   return (
     <>
@@ -17,7 +18,7 @@ export function PrivateLayoutContent(props: PrivateLayoutContentProps) {
           {props.title}
         </Group>
       </AppShell.Header>
-      <AppShell.Main bg="dark.9" className="flex flex-col">
+      <AppShell.Main bg={colorScheme === "dark" ? "dark.9" : "gray.2"} className="flex flex-col">
         {props.children}
       </AppShell.Main>
     </>

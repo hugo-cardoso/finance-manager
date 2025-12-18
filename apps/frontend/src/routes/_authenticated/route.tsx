@@ -1,4 +1,4 @@
-import { Center, Loader } from "@mantine/core";
+import { Center, Loader, useComputedColorScheme } from "@mantine/core";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useUserQueryOptions } from "@/hooks/queries/useUserQuery";
 import { PrivateLayout } from "@/layouts/PrivateLayout";
@@ -21,9 +21,13 @@ export const Route = createFileRoute("/_authenticated")({
       <Outlet />
     </PrivateLayout>
   ),
-  pendingComponent: () => (
-    <Center style={{ minHeight: "100vh" }} bg="dark.9">
-      <Loader size="sm" />
-    </Center>
-  ),
+  pendingComponent: () => {
+    const colorScheme = useComputedColorScheme("dark", { getInitialValueInEffect: true });
+
+    return (
+      <Center style={{ minHeight: "100vh" }} bg={colorScheme === "dark" ? "dark.9" : "gray.1"}>
+        <Loader size="sm" />
+      </Center>
+    );
+  },
 });

@@ -33,7 +33,14 @@ export function MonthReport(props: MonthReportProps) {
 
   return (
     <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
-      <Paper withBorder p="md" radius="md">
+      <Paper
+        style={{
+          boxShadow: "none",
+        }}
+        withBorder
+        p="md"
+        radius="md"
+      >
         <Group justify="space-between" align="flex-start">
           <div>
             <Text c="dimmed" size="xs" tt="uppercase" fw={700}>
@@ -49,7 +56,14 @@ export function MonthReport(props: MonthReportProps) {
         </Group>
       </Paper>
 
-      <Paper withBorder p="md" radius="md">
+      <Paper
+        style={{
+          boxShadow: "none",
+        }}
+        withBorder
+        p="md"
+        radius="md"
+      >
         <Group justify="space-between" align="flex-start">
           <div>
             <Text c="dimmed" size="xs" tt="uppercase" fw={700}>
@@ -65,7 +79,14 @@ export function MonthReport(props: MonthReportProps) {
         </Group>
       </Paper>
 
-      <Paper withBorder p="md" radius="md">
+      <Paper
+        style={{
+          boxShadow: "none",
+        }}
+        withBorder
+        p="md"
+        radius="md"
+      >
         <Group justify="space-between" align="flex-start">
           <div>
             <Text c="dimmed" size="xs" tt="uppercase" fw={700}>

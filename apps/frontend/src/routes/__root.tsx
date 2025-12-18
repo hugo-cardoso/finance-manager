@@ -1,10 +1,10 @@
+import { ColorSchemeScript } from "@mantine/core";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { MantineProvider } from "@/providers/mantine";
-
 import appCss from "../styles.css?url";
 
 export const Route = createRootRouteWithContext<{
@@ -36,11 +36,12 @@ export const Route = createRootRouteWithContext<{
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className="dark" data-mantine-color-scheme="dark">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
-      <body className="bg-(--mantine-color-dark-9)">
+      <body>
+        <ColorSchemeScript defaultColorScheme="dark" />
         <MantineProvider>{children}</MantineProvider>
         <TanStackDevtools
           config={{

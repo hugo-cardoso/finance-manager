@@ -1,4 +1,15 @@
-import { Anchor, Button, Center, Paper, PasswordInput, Stack, Text, TextInput, Title } from "@mantine/core";
+import {
+  Anchor,
+  Button,
+  Center,
+  Paper,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+  useComputedColorScheme,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -10,6 +21,7 @@ export const Route = createFileRoute("/auth/sign-in")({
 
 function RouteComponent() {
   const navigate = Route.useNavigate();
+  const colorScheme = useComputedColorScheme("dark", { getInitialValueInEffect: true });
 
   const form = useForm({
     mode: "uncontrolled",
@@ -56,7 +68,7 @@ function RouteComponent() {
   };
 
   return (
-    <Center style={{ minHeight: "100vh" }} bg="dark.8">
+    <Center style={{ minHeight: "100vh" }} bg={colorScheme === "dark" ? "dark.8" : "gray.2"}>
       <Paper shadow="md" p="xl" radius="md" withBorder style={{ width: "100%", maxWidth: "420px" }}>
         <Stack gap="lg">
           <Stack gap="xs">
