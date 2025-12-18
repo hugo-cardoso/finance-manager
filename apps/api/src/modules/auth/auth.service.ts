@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   private getAccessToken(payload: { email: string; sub: string }) {
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign(payload, { expiresIn: "1h" });
   }
 
   private getRefreshToken(payload: { email: string; sub: string }) {
@@ -97,11 +97,12 @@ export class AuthService {
 
   async refreshToken(refreshToken: string) {
     try {
-      const payload = this.jwtService.verify<{ email: string; sub: string }>(refreshToken, {
-        secret: process.env.JWT_SECRET!,
-      });
+      const payload = await this.jwtService.verifyAsync<{ email: string; sub: string }>(refreshToken);
 
-      return this.buildTokens(payload);
+      return this.buildTokens({
+        email: payload.email,
+        sub: payload.sub,
+      });
     } catch {
       throw new Error("Invalid refresh token");
     }
