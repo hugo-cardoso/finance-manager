@@ -1,8 +1,4 @@
-import { TZDate } from "@date-fns/tz";
-
 export class DateUtils {
-  private static readonly TIMEZONE = "America/Sao_Paulo";
-
   static toLocalDate(date: Date): Date {
     const [year, month, day] = date.toISOString().split("T")[0].split("-");
 

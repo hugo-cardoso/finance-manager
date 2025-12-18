@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "@src/common/database/prisma.service";
 import * as bcrypt from "bcrypt";
@@ -12,6 +16,26 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
+
+  private getAccessTokenExpiresAt() {
+    return Math.floor(Date.now() / 1000) + 3600; // 1 hour
+  }
+
+  private getAccessToken(payload: { email: string; sub: string }) {
+    return this.jwtService.sign(payload);
+  }
+
+  private getRefreshToken(payload: { email: string; sub: string }) {
+    return this.jwtService.sign(payload, { expiresIn: "7d" });
+  }
+
+  private buildTokens(payload: { email: string; sub: string }) {
+    return {
+      access_token: this.getAccessToken(payload),
+      refresh_token: this.getRefreshToken(payload),
+      expires_at: this.getAccessTokenExpiresAt(),
+    };
+  }
 
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
@@ -36,27 +60,13 @@ export class AuthService {
   }
 
   async signIn(signInDto: SignInDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: signInDto.email },
-    });
+    const user = await this.validateUser(signInDto.email, signInDto.password);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new UnauthorizedException("Invalid credentials");
     }
 
-    const isPasswordValid = await bcrypt.compare(signInDto.password, user.password);
-
-    if (!isPasswordValid) {
-      throw new Error("Invalid password");
-    }
-
-    const payload = { email: user.email, sub: user.id };
-    const access_token = this.jwtService.sign(payload);
-
-    return {
-      access_token,
-      expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hour
-    };
+    return this.buildTokens({ email: user.email, sub: user.id });
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -65,7 +75,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new Error("User already exists");
+      throw new ConflictException("User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(signUpDto.password, 10);
@@ -78,5 +88,17 @@ export class AuthService {
         lastName: signUpDto.last_name,
       },
     });
+  }
+
+  async refreshToken(refreshToken: string) {
+    try {
+      const payload = this.jwtService.verify<{ email: string; sub: string }>(refreshToken, {
+        secret: process.env.JWT_SECRET!,
+      });
+
+      return this.buildTokens(payload);
+    } catch {
+      throw new UnauthorizedException("Invalid refresh token");
+    }
   }
 }
